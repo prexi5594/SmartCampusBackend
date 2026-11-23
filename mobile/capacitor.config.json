@@ -1,0 +1,6 @@
+{
+  "appId": "org.smartcampus.navigator",
+  "appName": "Smart Campus",
+  "webDir": "dist",
+  "android": { "backgroundColor": "#f2f7fc" }
+}

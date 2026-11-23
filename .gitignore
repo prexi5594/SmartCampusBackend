@@ -1,0 +1,36 @@
+# Secrets and private student data
+.env
+.env.*
+!.env.example
+credentials/
+private-data/
+*.keystore
+*.jks
+*.p12
+
+# Common future build/dependency output
+node_modules/
+.pnpm-store/
+.android-tools/
+mobile/releases/*.apk
+.gradle/
+local.properties
+.idea/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/capacitor-cordova-android-plugins/
+dist/
+build/
+coverage/
+.next/
+.expo/
+.venv/
+__pycache__/
+*.pyc
+*.log
+
+# Local operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

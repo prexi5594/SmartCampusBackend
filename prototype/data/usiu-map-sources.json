@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "campus": "USIU-Africa",
+  "reviewOnly": true,
+  "preparedDate": "2026-11-21",
+  "downloadedUtc": "2026-11-21T20:31:30.729498+00:00",
+  "source": "https://www.openstreetmap.org/api/0.6/map?bbox=36.8765,-1.2205,36.8845,-1.2075",
+  "boundarySource": "https://www.openstreetmap.org/way/321620567",
+  "attribution": "© OpenStreetMap contributors",
+  "license": "ODbL-1.0",
+  "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "bounds": [
+    36.876871,
+    -1.2197973,
+    36.8825103,
+    -1.2074961
+  ],
+  "counts": {
+    "parking": 10,
+    "path": 154,
+    "boundary": 1,
+    "landmark": 40,
+    "building": 51
+  },
+  "mappedBuildingEntrances": [],
+  "pathNodeComponents": [
+    714,
+    3
+  ],
+  "limitations": [
+    "OSM geometry and names have not been checked on campus; labels may be outdated.",
+    "A mapped path is not evidence of current walking access or accessibility.",
+    "No automatic connection from building centres to paths has been created.",
+    "Paths near the boundary may extend outside it; they are display geometry only.",
+    "Most building heights are illustrative. This is not a surveyed 3D model.",
+    "Buildings absent from OSM are absent here; full campus coverage is not certified."
+  ]
+}

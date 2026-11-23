@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en" class="auth-pending">
+<head>
+  <!-- CHUNK 1: The Python backend serves this page after account sign-in. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Campus Navigator | USIU-Africa</title>
+  <link rel="stylesheet" href="account.css">
+  <script src="api.js" defer></script>
+  <script src="auth-guard.js" defer></script>
+  <script src="personal-data.js" defer></script>
+  <style>
+    /* CHUNK 2: Shared colours, type, spacing and reusable controls. */
+    :root {
+      --navy: #122e4c;
+      --blue: #1761cf;
+      --pale: #eef7ff;
+      --muted: #5d6d7e;
+      --line: #dfe7ef;
+      --green: #deeadb;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+    body { margin: 0; font: 15px/1.55 Arial, Helvetica, sans-serif; color: var(--navy); background: white; }
+    button, input, select { font: inherit; }
+    button, a, input, select { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+    [tabindex]:focus-visible { outline: 3px solid #a65b00; outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.2; }
+    h2 { font-size: 30px; letter-spacing: -1px; }
+    h3 { font-size: 17px; }
+    p { color: var(--muted); }
+    .container { width: min(1180px, calc(100% - 64px)); margin-inline: auto; }
+    .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #355c87; }
+    .primary { border: 0; border-radius: 8px; background: var(--blue); color: white; padding: 13px 19px; font-weight: 700; }
+    .primary:hover { background: #0e4eaf; }
+    .text-button { border: 0; background: transparent; color: #245b97; font-weight: 700; padding: 10px 0; }
+    .small { font-size: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .skip-link { position: fixed; top: -100px; left: 12px; padding: 12px; background: white; z-index: 100; }
+    .skip-link:not(:focus) { clip-path: inset(50%); }
+    .skip-link:focus { top: 10px; }
+    .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark { background: var(--navy); color: white; width: 39px; height: 43px; display: grid; place-items: center; border-radius: 10px; }
+    .brand strong { display: block; font-size: 15px; line-height: 1.1; }
+    .brand small { display: block; font-size: 8px; letter-spacing: 3px; margin-top: 5px; }
+    .site-header { background: white; border-bottom: 1px solid #edf0f5; position: relative; z-index: 10; }
+    .header-inner { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .nav-links { display: flex; align-items: center; gap: 30px; font-size: 13px; }
+    .nav-links a { padding-block: 10px; color: var(--muted); }
+    .nav-links a[aria-current="page"] { color: var(--blue); font-weight: 700; }
+    .menu-toggle { display: none; border: 1px solid var(--line); background: white; border-radius: 8px; width: 44px; height: 44px; }
+
+    /* CHUNK 3: Homepage and map presentation, followed by mobile layouts. */
+    .hero-wrap { background: var(--pale); padding: 58px 0 34px; }
+    .hero { max-width: 670px; margin: 0 auto 56px; text-align: center; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; background: #deedfe; border-radius: 30px; padding: 5px 11px; font-size: 11px; color: #235a92; margin-bottom: 18px; }
+    .badge .icon { width: 14px; height: 14px; }
+    .hero h1 { font-size: clamp(37px, 4.5vw, 56px); letter-spacing: -2px; margin-bottom: 18px; }
+    .hero p { max-width: 510px; margin: 0 auto 25px; }
+    .search-box { display: flex; align-items: center; gap: 11px; border: 1px solid var(--line); background: white; padding: 6px 6px 6px 15px; border-radius: 10px; }
+    .search-box input { min-width: 0; width: 100%; border: 0; background: transparent; padding: 9px 0; color: var(--navy); }
+    .search-box .primary { flex-shrink: 0; font-size: 12px; }
+    .search-area { position: relative; text-align: left; }
+    .search-clear { flex-shrink: 0; border: 0; border-radius: 6px; background: transparent; color: var(--navy); width: 40px; height: 40px; font-size: 22px; }
+    .search-clear:hover { background: var(--pale); }
+    .search-results { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 8; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: white; box-shadow: 0 8px 24px #122e4c1a; max-height: 235px; overflow: auto; }
+    .search-results p { font-size: 12px; padding: 5px 8px; margin: 0; }
+    .search-results ul { list-style: none; padding: 0; margin: 0; }
+    .search-results button { display: block; width: 100%; min-height: 44px; padding: 10px 8px; border: 0; border-radius: 6px; text-align: left; color: var(--navy); background: white; }
+    .search-results button:hover, .search-results button:focus-visible { background: var(--pale); }
+    .search-results strong, .search-results small { display: block; }
+    .search-results strong { font-size: 13px; }
+    .search-results small { font-size: 11px; color: var(--muted); }
+    .popular { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; font-size: 11px; }
+    .popular span { color: var(--muted); }
+    .popular button { border: 0; background: none; padding: 6px 0; color: var(--navy); }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
+    .section-heading h2 { font-size: 21px; letter-spacing: -.3px; margin: 0; }
+    .map-shell { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid #e2e9e4; background: #edf2ec; }
+    .map-viewport { height: 335px; overflow: auto; overscroll-behavior: contain; }
+    .map-canvas { position: relative; width: 100%; height: 100%; }
+    .map-drawing { width: 100%; height: 100%; display: block; }
+    .map-search-area { position: absolute; left: 16px; top: 16px; width: min(300px, calc(100% - 85px)); z-index: 3; }
+    .map-search { padding-block: 2px; box-shadow: 0 2px 10px #122e4c08; }
+    .map-search input { font-size: 12px; }
+    .north { position: absolute; top: 16px; right: 16px; display: grid; text-align: center; border-radius: 7px; background: white; padding: 6px 11px; font-size: 15px; line-height: 1.1; }
+    .north small { font-size: 9px; margin-top: 4px; }
+    .map-tools { position: absolute; right: 16px; bottom: 16px; display: flex; flex-direction: column; background: white; padding: 4px; border-radius: 9px; box-shadow: 0 2px 10px #122e4c0c; }
+    .map-tools button { border: 0; background: white; color: var(--navy); width: 36px; height: 36px; font-size: 20px; }
+    .map-tools button:hover { background: var(--pale); }
+    .map-tools button:disabled { color: #abb7c0; cursor: default; }
+    .map-tools svg { width: 17px; height: 17px; }
+    .map-pin { position: absolute; transform: translate(-50%, -50%); border: 1px solid #e0e7e1; border-radius: 5px; background: white; color: var(--navy); padding: 5px 7px; font-size: 10px; font-weight: 700; max-width: 28%; line-height: 1.3; min-height: 36px; }
+    .map-pin::before { content: '•'; color: var(--blue); margin-right: 4px; }
+    .map-pin[aria-pressed="true"] { background: var(--blue); color: white; border-color: var(--blue); }
+    .map-pin[aria-pressed="true"]::before { color: white; }
+    .map-pin.is-start { outline: 2px solid #24644a; outline-offset: 2px; }
+    .map-caption { font-size: 11px; color: var(--muted); margin: 10px 0 0; }
+    .legend { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; font-size: 11px; color: var(--muted); margin-top: 15px; }
+    .legend span::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 2px; background: #b7cadb; margin-right: 6px; }
+    .legend .green::before { background: #b7d0af; }
+    .legend .route-key::before { background: var(--blue); }
+    .destinations { padding: 65px 0; }
+    .destinations h2 { margin-bottom: 10px; }
+    .facility-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 28px; }
+    .facility-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 23px; display: flex; flex-direction: column; align-items: flex-start; min-height: 237px; }
+    .facility-card:hover { border-color: #a8c5eb; box-shadow: 0 4px 18px #122e4c07; }
+    .card-icon { width: 37px; height: 37px; border-radius: 8px; background: var(--pale); color: #3374b5; display: grid; place-items: center; margin-bottom: 17px; }
+    .facility-card h3 { font-size: 15px; margin-bottom: 9px; }
+    .facility-card p { font-size: 12px; margin-bottom: 18px; }
+    .facility-card button { width: 100%; display: flex; justify-content: space-between; margin-top: auto; font-size: 12px; text-align: left; }
+    .facility-category { display: block; font-size: 11px; color: #355c87; margin-bottom: 8px; }
+    .catalogue-toolbar { display: flex; align-items: end; gap: 16px; flex-wrap: wrap; margin: 20px 0 12px; }
+    .category-field { flex: 1; min-width: 0; }
+    .category-field label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+    .category-field select { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 7px; padding: 9px; color: var(--navy); background: white; }
+    .catalogue-toolbar .category-field { flex: 0 1 260px; }
+    .catalogue-reset { min-height: 44px; }
+    .catalogue-note { font-size: 12px; }
+    .catalogue-empty { grid-column: 1 / -1; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: white; }
+    .catalogue-empty p:last-child { margin-bottom: 0; }
+    .map-placeholder { min-height: 180px; display: grid; place-items: center; text-align: center; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: #edf2ec; }
+    .catalogue-message { padding: 16px; margin-block: 18px; background: var(--pale); border: 1px solid var(--line); border-radius: 8px; }
+    .catalogue-message p { margin-bottom: 0; }
+    .facility-list .facility-name { flex: 1; min-width: 0; }
+    .facility-list small { display: block; color: var(--muted); font-size: 11px; font-weight: 400; margin-top: 2px; }
+    .about-section { background: #f5f8fd; padding: 45px 0; }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 70px; align-items: center; }
+    .about-grid h2 { font-size: 27px; margin-bottom: 12px; }
+    .about-grid p { font-size: 13px; margin-bottom: 0; }
+    .support-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+    .support-card h3 { margin-bottom: 10px; }
+    details { font-size: 12px; margin-top: 14px; }
+    summary { cursor: pointer; color: #245b97; font-weight: 700; padding: 5px 0; }
+    .site-footer { background: var(--navy); color: white; padding: 22px 0; font-size: 11px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+    .footer-inner span { color: #c4d2e3; }
+    .explore-page { background: #f5f8fd; padding: 38px 0 45px; }
+    .explore-title { font-size: 34px; letter-spacing: -1px; margin-bottom: 9px; }
+    .demo-note { border: 1px solid #d7e5f3; border-radius: 8px; background: #edf5ff; padding: 10px 13px; font-size: 12px; margin: 18px 0 24px; }
+    .explore-grid { display: grid; grid-template-columns: 285px minmax(0, 1fr); gap: 22px; align-items: start; }
+    .sidebar { display: grid; gap: 18px; }
+    .panel { background: white; padding: 19px; border: 1px solid var(--line); border-radius: var(--radius); }
+    .panel h2 { font-size: 17px; letter-spacing: -.2px; margin-bottom: 5px; }
+    .result-count { font-size: 11px; margin-bottom: 12px; }
+    .facility-list { display: grid; gap: 3px; }
+    .facility-list button { text-align: left; display: flex; align-items: center; gap: 9px; border: 0; border-radius: 6px; padding: 11px 9px; color: var(--navy); background: white; width: 100%; font-size: 12px; }
+    .facility-list button .icon { width: 15px; height: 15px; }
+    .facility-list button[aria-pressed="true"] { background: #eaf2ff; color: #1452b1; font-weight: 700; }
+    .facility-list button:hover { background: var(--pale); }
+    .facility-list .arrow { margin-left: auto; }
+    .empty { padding: 10px 0; font-size: 13px; }
+    .empty button { padding-left: 0; color: var(--blue); }
+    .route-panel label { font-size: 10px; font-weight: 700; color: #53687d; text-transform: uppercase; letter-spacing: .5px; display: block; margin-top: 13px; }
+    .route-panel select { width: 100%; border: 1px solid var(--line); padding: 10px; border-radius: 7px; background: #f5f8fc; color: var(--navy); margin-top: 5px; font-size: 12px; }
+    .selected-description { font-size: 12px; margin: 12px 0; }
+    .route-summary { margin-top: 15px; color: var(--navy); }
+    .route-summary strong { font-size: 25px; }
+    .route-summary span { margin-left: 7px; font-size: 12px; color: var(--muted); }
+    .route-hint { font-size: 11px; margin: 4px 0 12px; }
+    .route-steps { padding-left: 23px; font-size: 12px; color: #536477; }
+    .route-steps li { padding: 5px 2px; }
+    .route-steps li.current-step { color: #124da3; font-weight: 700; background: #edf5ff; border-radius: 5px; }
+    .route-panel .primary { width: 100%; margin-top: 7px; font-size: 12px; }
+    .route-panel .primary:disabled { background: #d5dfeb; color: #4e6076; cursor: default; }
+    .walk-status { font-size: 12px; margin: 10px 0 0; color: var(--navy); }
+    .reset-walk { width: 100%; font-size: 12px; }
+    .explore-map .map-viewport { height: 590px; }
+    .explore-map .section-heading h2 { font-size: 15px; }
+    .route-label { font-size: 11px; color: #255995; }
+    @media (max-width: 1000px) {
+      .nav-links { gap: 18px; }
+      .facility-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .explore-grid { grid-template-columns: 255px minmax(0, 1fr); gap: 16px; }
+      .map-pin { font-size: 9px; padding-inline: 4px; }
+      .map-shell { padding-bottom: 60px; }
+      .map-tools { flex-direction: row; bottom: 4px; }
+    }
+    @media (max-width: 760px) {
+      .container { width: calc(100% - 36px); }
+      .header-inner { min-height: 70px; }
+      .header-cta { display: none; }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-links { display: none; position: absolute; left: 0; right: 0; top: 100%; padding: 18px; background: white; border-bottom: 1px solid var(--line); box-shadow: 0 8px 12px #122e4c0a; }
+      .nav-links.is-open { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+      .nav-links a { padding: 12px; }
+      .hero-wrap { padding-top: 34px; }
+      .hero { text-align: left; margin-bottom: 38px; }
+      .hero h1 { font-size: 38px; letter-spacing: -1.7px; }
+      .hero p { margin-left: 0; font-size: 14px; }
+      .hero-search { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; padding: 10px; }
+      .hero-search .primary { grid-column: 1 / -1; width: 100%; }
+      .popular { justify-content: flex-start; gap: 10px; }
+      .section-heading h2 { font-size: 18px; }
+      .section-heading a { font-size: 11px; }
+      .map-viewport, .explore-map .map-viewport { height: 360px; }
+      .map-search-area { left: 10px; top: 10px; }
+      .map-pin { font-size: 10px; min-height: 44px; }
+      .map-pin[data-map-place="main"] { transform: translate(0, -50%); }
+      .map-tools button { width: 44px; height: 44px; }
+      .catalogue-toolbar { align-items: stretch; }
+      .catalogue-toolbar .category-field { flex: 1 1 100%; }
+      .map-tools, .north { right: 10px; }
+      .destinations { padding: 42px 0; }
+      .destinations h2 { font-size: 29px; }
+      .facility-card { padding: 22px; }
+      .about-grid { grid-template-columns: 1fr; gap: 25px; }
+      .footer-inner { flex-direction: column; gap: 7px; }
+      .explore-page { padding-top: 28px; }
+      .explore-title { font-size: 30px; }
+      .explore-grid { display: flex; flex-direction: column; gap: 22px; }
+      .explore-map { order: -1; width: 100%; }
+      .sidebar { width: 100%; }
+      .panel { padding: 20px; }
+      .facility-list button { font-size: 13px; min-height: 46px; }
+    }
+    @media (max-width: 480px) { .facility-grid { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+  <link rel="stylesheet" href="vendor/maplibre-gl-6.19.0/maplibre-gl.css">
+  <link rel="stylesheet" href="usiu-map-home.css">
+  <script src="usiu-directory.js" defer></script>
+  <script src="usiu-map-review.js" defer></script>
+</head>
+<body>
+  <!-- CHUNK 4: Semantic HTML for the shared header and the two page views. -->
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" aria-label="Smart Campus Navigator home">
+        <span class="brand-mark" data-icon="pin" aria-hidden="true"></span>
+        <span><strong>Smart Campus</strong><small>NAVIGATOR</small></span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Open navigation menu"><span data-icon="menu"></span></button>
+      <nav class="nav-links" id="main-nav" aria-label="Main navigation">
+        <a href="#home" data-page-link="home">Home</a>
+        <a href="#explore" data-page-link="explore">Explore Campus</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="primary header-cta" href="#explore">Open campus map &nbsp; →</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <p id="search-help" class="sr-only">Search by name, category or sample alias. Tab through matching places; Enter or Space selects a result. Escape closes suggestions.</p>
+    <p id="catalogue-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+    <div id="catalogue-message" class="container catalogue-message" role="alert" hidden></div>
+    <div id="home-view">
+      <section class="hero-wrap">
+        <div class="container">
+          <div class="hero">
+            <span class="badge"><span data-icon="pin"></span>A smarter way to explore</span>
+            <h1 id="home-title" tabindex="-1">Find Your Way<br>Around Campus.</h1>
+            <p>Explore your campus with ease. Find lecture halls, laboratories, libraries and other facilities in just a few clicks.</p>
+            <div class="search-area" data-search-area>
+            <form class="search-box hero-search" id="hero-search" role="search" aria-label="Find a campus facility">
+              <span data-icon="search"></span>
+              <label class="sr-only" for="hero-query">Search campus facilities</label>
+              <input id="hero-query" data-query data-catalogue-control type="search" placeholder="Where would you like to go?" autocomplete="off" aria-controls="hero-results" aria-describedby="search-help" disabled>
+              <button class="search-clear" type="button" data-clear-search aria-label="Clear search" hidden>×</button>
+              <button class="primary" data-catalogue-control type="submit" disabled>Explore Campus &nbsp; →</button>
+            </form>
+            <div class="search-results" id="hero-results" hidden></div>
+            </div>
+            <div class="popular"><span>Popular:</span><button data-catalogue-control data-destination="library" disabled>Library</button><button data-catalogue-control data-destination="lectures" disabled>Lecture Halls</button><button data-catalogue-control data-destination="student" disabled>Student Centre</button></div>
+          </div>
+          <section id="campus-map" class="campus-map" aria-labelledby="campus-map-title">
+            <div class="section-heading"><h2 id="campus-map-title">Explore USIU-Africa in 3D</h2><a class="text-button" href="usiu-map-review.html">Open full map</a></div>
+            <p>Find a building or classroom. Campus preview: locations and entrances still need confirmation.</p>
+    <div class="workspace">
+      <section class="map-column" aria-label="Campus map">
+        <div class="toolbar">
+          <div class="segmented" aria-label="Map perspective"><button id="view-2d" aria-pressed="true">2D</button><button id="view-3d" aria-pressed="false" disabled>3D</button></div>
+          <div class="segmented" aria-label="Map area"><button id="area-teaching" aria-pressed="true">Teaching area</button><button id="area-campus" aria-pressed="false">Whole campus</button></div>
+          <button id="map-reset" class="quiet">Reset view</button>
+        </div>
+        <div class="map-frame">
+          <div id="map-live" hidden aria-label="Interactive campus map"></div>
+          <div id="map-flat" role="img" aria-label="North-up campus layout. Select a building using the building selector or search."></div>
+          <span class="north" id="flat-north" aria-hidden="true">N ↑</span>
+          <div id="map-loading" class="map-message">Loading campus geography…</div>
+        </div>
+        <div class="legend" aria-label="Map legend"><span><i class="building"></i>Mapped building</span><span><i class="selected"></i>Selected building</span><span><i class="path"></i>Mapped path / road</span><span><i class="green"></i>Outdoor space</span></div>
+        <p class="map-note">Review map · Heights are illustrative unless stated. Paths show mapped connections; entrances and walking access still need confirmation.</p>
+        <p class="attribution">Map data <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors · ODbL</a>. <a href="data/usiu-geography.geojson" download>Download map data</a> · <a href="?renderer=svg">Use basic 2D map</a></p>
+        <p id="map-status" class="status" role="status" aria-live="polite"></p>
+      </section>
+      <aside aria-label="Find and review a building">
+        <section class="panel search-panel">
+          <label for="campus-query">Find a building or room</label>
+          <div class="search-row"><input type="search" id="campus-query" placeholder="Try LT4, SS12, Lab 1…" autocomplete="off" aria-controls="search-results"><button id="clear-search" class="quiet" aria-label="Clear search">Clear</button></div>
+          <div id="search-results" class="results" aria-label="Search results"></div>
+        </section>
+        <section class="panel" id="review-details" aria-label="Selected location">
+          <p class="eyebrow">Selected location</p>
+          <h2 id="detail-name">Choose a building</h2>
+          <p id="detail-note">Select a building on the map or search for a room.</p>
+          <dl id="detail-facts"></dl>
+          <p id="detail-room"></p>
+          <a id="detail-source" class="source-link" hidden target="_blank" rel="noopener">View source on OpenStreetMap</a>
+        </section>
+        <section class="panel">
+          <label for="building-picker">Inspect any mapped building</label>
+          <select id="building-picker"><option value="">Select a review number…</option></select>
+          <p class="help">Use the B-number when suggesting a correction. Unnamed outlines stay unnamed until identified.</p>
+        </section>
+        <section class="panel compact">
+          <h2>What needs your review</h2>
+          <ul><li>Confirm the four academic building matches.</li><li>Identify Wooden Block GH and check EF, IJ and KL.</li><li>Confirm entrances and permitted walking paths.</li></ul>
+          <button id="inspect-wooden" class="quiet">Inspect the Wooden Blocks area</button>
+          <p class="help">Gate points come from USIU’s commencement guidance. Their everyday access still needs checking.</p>
+          <a class="source-link" href="https://www.usiu.ac.ke/documents/find-your-class/" target="_blank" rel="noopener">Official building and room guide</a>
+        </section>
+      </aside>
+    </div>
+            <noscript>Enable JavaScript to explore the campus map.</noscript>
+          </section>
+          <div id="home-map" hidden aria-hidden="true"></div>
+        </div>
+      </section>
+      <section class="container destinations" aria-labelledby="destinations-title">
+        <p class="eyebrow">Everyday destinations</p>
+        <h2 id="destinations-title">Everything you need,<br>right where you need it.</h2>
+        <p>From your first lecture to your favourite lunch spot, find your place on campus.</p>
+        <p class="catalogue-note">Demo catalogue · Names, categories and aliases are sample information awaiting campus verification.</p>
+        <div class="catalogue-toolbar">
+          <div class="category-field"><label for="home-category">Filter facilities by category</label><select id="home-category" data-category data-catalogue-control disabled><option value="all">All categories</option></select></div>
+          <button class="text-button catalogue-reset" data-reset-filters data-catalogue-control disabled>Reset all filters</button>
+        </div>
+        <p class="result-count" id="home-result-count">Loading facilities…</p>
+        <div class="facility-grid" id="facility-cards" aria-busy="true"></div>
+      </section>
+      <section class="about-section" id="about" aria-labelledby="about-title">
+        <div class="container about-grid">
+          <div><h2 id="about-title" tabindex="-1">A little less searching.<br>A lot more campus.</h2><p>Built for first days, everyday journeys and everything in between. Smart Campus Navigator helps students, staff and visitors feel right at home.</p></div>
+          <div class="support-card" id="contact"><h3 id="contact-title" tabindex="-1">Need a hand finding your way?</h3><p>Your campus support details will appear here.</p><details><summary>Campus support information →</summary><p>This draft does not include a real phone number or email address. Add the official welcome desk location, opening hours and contact details before launch.</p></details></div>
+        </div>
+      </section>
+    </div>
+    <section class="explore-page" id="explore-view" hidden aria-labelledby="explore-title">
+      <div class="container">
+        <p class="eyebrow">Campus guide / Explore</p>
+        <h1 class="explore-title" id="explore-title" tabindex="-1">Your next stop, made simple.</h1>
+        <p>Search a place, choose your route and find your way.</p>
+        <p class="demo-note">Frontend demo · These paths and distances are illustrative. Directions advance manually; this is not live GPS navigation.</p>
+        <div class="explore-grid">
+          <aside class="sidebar" aria-label="Facilities and route planner">
+            <section class="panel" aria-labelledby="facilities-title">
+              <h2 id="facilities-title">Explore facilities</h2>
+              <div class="category-field"><label for="explore-category">Filter facilities by category</label><select id="explore-category" data-category data-catalogue-control disabled><option value="all">All categories</option></select></div>
+              <button class="text-button catalogue-reset" data-reset-filters data-catalogue-control disabled>Reset all filters</button>
+              <p class="result-count" id="result-count">Loading facilities…</p>
+              <div class="facility-list" id="facility-list" aria-busy="true"></div>
+            </section>
+            <section class="panel route-panel" aria-labelledby="route-title">
+              <h2 id="route-title">Your walking route</h2>
+              <label for="start-location">Starting location</label><select id="start-location" data-catalogue-control disabled></select>
+              <label for="destination">Destination</label><select id="destination" data-catalogue-control disabled></select>
+              <p class="selected-description" id="selected-description"></p>
+              <button class="text-button" id="save-destination" type="button" data-catalogue-control disabled>Save this place</button>
+              <div id="route-summary" class="route-summary" role="status" aria-live="polite"></div>
+              <p class="route-hint">Sample distance · walking estimate at 75 m/min</p>
+              <ol class="route-steps" id="route-steps"></ol>
+              <button class="primary" id="walk-button" data-catalogue-control disabled>Start directions (demo) →</button>
+              <p class="walk-status" id="walk-status" role="status" aria-live="polite"></p>
+              <button class="text-button reset-walk" id="reset-walk" hidden>Reset walkthrough</button>
+            </section>
+          </aside>
+          <section class="explore-map" aria-label="Interactive campus map">
+            <div class="section-heading"><h2>Campus overview</h2><span class="route-label">● Walking route</span></div>
+            <div id="explore-map"><p class="map-placeholder">Loading the sample map…</p></div>
+            <p class="map-caption" id="map-selection"></p>
+            <p class="map-caption">Blue = destination · green outline = start. Zoom with + / −; scroll the enlarged map. Reset fits the whole campus.</p>
+          </section>
+        </div>
+        <section class="personal-places" id="my-places" aria-labelledby="my-places-title">
+          <h2 id="my-places-title" tabindex="-1">My saved places</h2>
+          <p>Keep a place and a personal note for your next visit. Only your account can access these saves.</p>
+          <div class="personal-layout">
+            <form id="saved-place-form">
+              <label for="saved-location">Campus place</label>
+              <select id="saved-location" required disabled></select>
+              <label for="saved-title">Your title</label>
+              <input id="saved-title" maxlength="100" required disabled>
+              <label for="saved-note">Personal note <span>(optional)</span></label>
+              <textarea id="saved-note" rows="3" maxlength="4000" disabled placeholder="For example: meet near the entrance"></textarea>
+              <div class="personal-buttons"><button class="primary" id="save-place-submit" type="submit" disabled>Save place</button><button class="quiet" id="cancel-place-edit" type="button" hidden>Cancel edit</button></div>
+              <p class="account-feedback" id="saved-place-message" role="status" aria-live="polite"></p>
+              <p class="account-feedback">These places use the sample catalogue and schematic map.</p>
+            </form>
+            <div>
+              <div class="personal-buttons"><button class="quiet" id="refresh-places" type="button" disabled>Refresh saved places</button></div>
+              <p class="account-feedback" id="saved-list-message" role="status" aria-live="polite">Loading your saved places…</p>
+              <ul class="personal-list" id="saved-places-list" aria-label="Your saved places" aria-busy="true"></ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+    <dialog class="account-dialog" id="delete-place-dialog" aria-labelledby="delete-place-title" aria-describedby="delete-place-description">
+      <h2 id="delete-place-title">Delete saved place?</h2>
+      <p id="delete-place-description"></p>
+      <form method="dialog" class="personal-buttons">
+        <button class="dialog-cancel" value="cancel" autofocus>Keep place</button>
+        <button class="dialog-delete" value="delete">Delete place</button>
+      </form>
+    </dialog>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><strong>Smart Campus Navigator</strong><span>Your campus. Connected.</span><span>Frontend sample · Campus guide</span></div></footer>
+  <noscript><style>html.auth-pending body { visibility: visible; }</style><p class="container">Enable JavaScript to use your account, map, facility search and directions.</p></noscript>
+
+  <script src="data/facilities.demo.js"></script>
+  <script src="catalogue.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    // CHUNK 5: UI state stays separate from the catalogue and demo routing data.
+    const state = { start: 'main', destination: 'library', query: '', category: 'all', route: null, steps: [], step: -1, pendingReveal: false };
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => [...document.querySelectorAll(selector)];
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    const iconPaths = {
+      pin: '<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+      search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/>',
+      menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+      book: '<path d="M12 5v16M12 5C9 3 5 3 3 4v15c3-1 6-1 9 2 3-3 6-3 9-2V4c-2-1-6-1-9 1Z"/>',
+      lecture: '<rect x="3" y="3" width="18" height="13" rx="1"/><path d="m8 21 4-5 4 5M7 7h10M7 11h6"/>',
+      monitor: '<rect x="3" y="3" width="18" height="13" rx="2"/><path d="M12 16v5M8 21h8"/>',
+      building: '<path d="M5 21V5l7-3 7 3v16H5ZM10 21v-5h4v5M8 7h1M15 7h1M8 11h1M15 11h1"/>',
+      people: '<circle cx="9" cy="7" r="3"/><path d="M3 21v-4a6 6 0 0 1 12 0v4M16 4a3 3 0 0 1 0 6M18 13c3 0 3 4 3 8"/>',
+      food: '<path d="M5 3v6a3 3 0 0 0 6 0V3M8 3v18M17 21v-8h3V3c-3 0-3 6-3 10"/>',
+      parking: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 18V6h4a4 4 0 0 1 0 8H9"/>',
+      trophy: '<path d="M8 3h8v7a4 4 0 0 1-8 0V3ZM8 5H3v3a4 4 0 0 0 5 4M16 5h5v3a4 4 0 0 1-5 4M12 14v6M8 21h8"/>',
+      fit: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>'
+    };
+    const icon = name => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${iconPaths[name] || iconPaths.pin}</svg>`;
+
+    // Navigation remains usable even if a local catalogue script is missing.
+    $$('[data-icon]').forEach(element => { element.innerHTML = icon(element.dataset.icon); });
+    $('#menu-toggle').addEventListener('click', () => {
+      const open = $('#main-nav').classList.toggle('is-open');
+      $('#menu-toggle').setAttribute('aria-expanded', String(open));
+      $('#menu-toggle').setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    });
+    document.addEventListener('click', event => {
+      if (event.target.closest('#main-nav a')) closeMenu();
+      if (event.target.closest('[data-retry]')) location.reload();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && $('#main-nav').classList.contains('is-open')) {
+        closeMenu(); $('#menu-toggle').focus();
+      }
+    });
+    window.addEventListener('hashchange', () => showPage());
+    showPage(false);
+
+    function showDataState(kind) {
+      const empty = kind === 'empty';
+      const title = empty ? 'No facilities are available yet.' : 'The facility catalogue could not be loaded.';
+      const detail = empty ? 'There are no places to search or route to. Check again when campus facilities have been added.' : 'Reload the page to try again. If this continues, check that the local catalogue files are present and valid.';
+      $('#catalogue-message').hidden = false;
+      if (empty) $('#catalogue-message').removeAttribute('role');
+      $('#catalogue-message').innerHTML = `<strong>${title}</strong><p>${detail}</p><button class="text-button" data-retry>Reload catalogue</button>`;
+      $('#catalogue-announcement').textContent = title;
+      for (const selector of ['#home-result-count', '#result-count']) $(selector).textContent = title;
+      for (const selector of ['#facility-cards', '#facility-list']) {
+        $(selector).innerHTML = `<div class="catalogue-empty"><p>${detail}</p></div>`;
+        $(selector).setAttribute('aria-busy', 'false');
+      }
+      for (const selector of ['#home-map', '#explore-map']) $(selector).innerHTML = '<p class="map-placeholder">The sample map is unavailable until facilities can be loaded.</p>';
+      $('.route-panel').hidden = true;
+    }
+
+    // CHUNK 6: Validate the local fixtures before using them in the UI or route graph.
+    let catalogue;
+    try {
+      if (!window.CampusCatalogue) throw new Error('The catalogue helper could not be loaded.');
+      catalogue = window.CampusCatalogue.create(window.CampusDemoFacilities);
+    } catch (error) {
+      console.error(error);
+      showDataState('error');
+      return;
+    }
+    if (!catalogue.places.length) { showDataState('empty'); return; }
+    // x/y are a presentation adapter for the original drawing, not GPS coordinates.
+    const places = catalogue.places.map(place => ({ ...place, ...place.schematic }));
+    const mainEntrance = { ...catalogue.entrance, ...catalogue.entrance.schematic };
+    const locations = [mainEntrance, ...places];
+    const byId = Object.fromEntries(locations.map(place => [place.id, place]));
+    if (!byId[state.destination]) state.destination = places[0].id;
+    const nodes = Object.fromEntries(locations.map(place => [place.id, [place.x, place.y]]));
+    Object.assign(nodes, {
+      nw: [300, 210], nc: [450, 210], ne: [600, 210],
+      sw: [300, 420], sc: [450, 420], se: [600, 420],
+      tl: [150, 210], tr: [750, 210], ml: [150, 420], mr: [750, 420], bottom: [600, 555]
+    });
+    const connections = [
+      ['main', 'sw', 'University Walk'], ['sw', 'nw', 'University Walk'],
+      ['nw', 'nc', 'Library Walk'], ['nc', 'ne', 'Library Walk'],
+      ['nw', 'tl', 'Library Walk'], ['ne', 'tr', 'Library Walk'],
+      ['ne', 'se', 'East Walk'], ['se', 'bottom', 'East Walk'],
+      ['sw', 'sc', 'Central Walk'], ['sc', 'se', 'Central Walk'],
+      ['sw', 'ml', 'Central Walk'], ['se', 'mr', 'Central Walk'],
+      ['tl', 'lectures', 'the entrance path'], ['nc', 'library', 'the entrance path'],
+      ['tr', 'labs', 'the entrance path'], ['ml', 'admin', 'the entrance path'],
+      ['sc', 'student', 'the entrance path'], ['mr', 'cafe', 'the entrance path'],
+      ['main', 'parking', 'South Walk'], ['bottom', 'sports', 'South Walk']
+    ];
+    const edges = connections.filter(([a, b]) => nodes[a] && nodes[b]).map(([a, b, road]) => ({
+      a, b, road,
+      // Synthetic scale for the example only. Replace with measured path lengths.
+      meters: Math.hypot(nodes[a][0] - nodes[b][0], nodes[a][1] - nodes[b][1]) * 0.8
+    }));
+
+    // CHUNK 7: Render both maps from the same data, with real buttons over an SVG drawing.
+    function mapMarkup(prefix) {
+      const buildingShapes = places.map(place => `<rect data-building="${place.id}" x="${place.x - 58}" y="${place.y - 90}" width="116" height="66" rx="5" fill="#d4e0e9" stroke="#bfccd5" stroke-width="3"/>`).join('');
+      const paths = edges.map(edge => `<line x1="${nodes[edge.a][0]}" y1="${nodes[edge.a][1]}" x2="${nodes[edge.b][0]}" y2="${nodes[edge.b][1]}" stroke="#fff" stroke-width="14"/>`).join('');
+      const pins = locations.map(place => `<button class="map-pin" style="left:${place.x / 9}%;top:${place.y / 6}%" data-map-place="${place.id}" aria-label="${place.id === 'main' ? 'Set start to Main Entrance' : `Directions to ${escapeHTML(place.name)}`}" aria-pressed="false">${escapeHTML(place.mapName)}</button>`).join('');
+      return `<div class="map-shell" data-map="${prefix}">
+        <div class="map-viewport" tabindex="0" aria-label="${prefix === 'home' ? 'Preview' : 'Explore'} map; scroll to pan when zoomed">
+          <div class="map-canvas">
+            <svg class="map-drawing" viewBox="0 0 900 600" preserveAspectRatio="none" aria-hidden="true">
+              <rect width="900" height="600" fill="#edf2ec"/>
+              <rect x="28" y="95" width="235" height="415" rx="28" fill="#dfead9"/>
+              <rect x="350" y="260" width="200" height="139" rx="24" fill="#dce9d7"/>
+              <rect x="642" y="110" width="225" height="400" rx="28" fill="#e0eadc"/>
+              <path d="M300 65V580M600 65V580M0 210H900M0 420H900" stroke="white" stroke-width="25" fill="none"/>
+              <path d="M300 65V580M600 65V580M0 210H900M0 420H900" stroke="#e5eae3" stroke-width="1" fill="none"/>
+              ${paths}${buildingShapes}
+              <text x="450" y="282" text-anchor="middle" fill="#5a7458" font-family="Arial" font-size="12">CENTRAL GREEN</text>
+              <polyline data-route-line points="" fill="none" stroke="#1761cf" stroke-width="3" stroke-dasharray="6 4" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            </svg>${pins}
+          </div>
+        </div>
+        <div class="search-area map-search-area" data-search-area>
+        <form class="search-box map-search" data-map-search role="search" aria-label="${prefix === 'home' ? 'Preview' : 'Explore'} map search">
+          ${icon('search')}<label class="sr-only" for="${prefix}-map-query">Search buildings or facilities</label>
+          <input id="${prefix}-map-query" data-query type="search" placeholder="Search buildings or facilities" autocomplete="off" aria-controls="${prefix}-results" aria-describedby="search-help">
+          <button class="search-clear" type="button" data-clear-search aria-label="Clear search" hidden>×</button>
+        </form>
+        <div class="search-results" id="${prefix}-results" hidden></div>
+        </div>
+        <div class="north" aria-label="North is up">↑<small>N</small></div>
+        <div class="map-tools" aria-label="Map controls">
+          <button data-zoom="in" aria-label="Zoom in">+</button>
+          <button data-zoom="out" aria-label="Zoom out">−</button>
+          <button data-zoom="reset" aria-label="Reset map view">${icon('fit')}</button>
+        </div>
+      </div>`;
+    }
+    function noMatchesMarkup() {
+      return '<div class="catalogue-empty"><p>No facilities match these filters. Try a different name or category.</p><button class="text-button" data-reset-filters>Reset all filters</button></div>';
+    }
+    function renderCards(matches) {
+      $('#facility-cards').innerHTML = matches.length ? matches.map(place => `<article class="facility-card">
+        <span class="card-icon">${icon(place.icon)}</span><span class="facility-category">${escapeHTML(place.categoryName)}</span><h3>${escapeHTML(place.name)}</h3>
+        <p>${escapeHTML(place.description)}</p><button class="text-button" data-destination="${place.id}" aria-label="View ${escapeHTML(place.name)} on the map">View Location <span aria-hidden="true">↗</span></button>
+      </article>`).join('') : noMatchesMarkup();
+    }
+
+    // CHUNK 8: Search filters facility data; the currently selected route stays intact.
+    function searchPlaces(query) {
+      return catalogue.search(query, state.category);
+    }
+    function renderCatalogue() {
+      const matches = searchPlaces(state.query);
+      const category = catalogue.categories.find(item => item.id === state.category);
+      const summary = `${matches.length} of ${places.length} facilities${state.query.trim() ? ` matching “${state.query.trim()}”` : ''}${category ? ` · ${category.name}` : ''}`;
+      for (const selector of ['#home-result-count', '#result-count', '#catalogue-announcement']) $(selector).textContent = summary;
+      renderCards(matches);
+      $('#facility-list').innerHTML = matches.length ? matches.map(place => `<button data-destination="${place.id}" aria-pressed="${place.id === state.destination}">${icon('pin')}<span class="facility-name">${escapeHTML(place.name)}<small>${escapeHTML(place.categoryName)}</small></span><span class="arrow" aria-hidden="true">›</span></button>`).join('') : noMatchesMarkup();
+      const suggestions = matches.length ? `<ul aria-label="Matching facilities">${matches.map(place => `<li><button data-destination="${place.id}"><strong>${escapeHTML(place.name)}</strong><small>${escapeHTML(place.categoryName)}</small></button></li>`).join('')}</ul>` : noMatchesMarkup();
+      $$('.search-results').forEach(panel => { panel.innerHTML = `<p>${escapeHTML(summary)}</p>${suggestions}`; });
+      $$('[data-query]').forEach(input => { if (input.value !== state.query) input.value = state.query; });
+      $$('[data-category]').forEach(select => { select.value = state.category; });
+      $$('[data-clear-search]').forEach(button => { button.hidden = !state.query; });
+      for (const selector of ['#facility-cards', '#facility-list']) $(selector).setAttribute('aria-busy', 'false');
+    }
+    function closeSearchResults() {
+      $$('.search-results').forEach(panel => { panel.hidden = true; });
+    }
+    function showSearchResults(input) {
+      closeSearchResults();
+      if (state.query.trim()) document.getElementById(input.getAttribute('aria-controls')).hidden = false;
+    }
+
+    // CHUNK 9: Dijkstra's algorithm chooses the shortest connected route by path distance.
+    // For this small graph, a simple scan is easier to learn than a priority queue.
+    function shortestPath(start, end) {
+      if (!nodes[start] || !nodes[end]) return null;
+      const distance = Object.fromEntries(Object.keys(nodes).map(id => [id, Infinity]));
+      const previous = {};
+      const unvisited = new Set(Object.keys(nodes));
+      distance[start] = 0;
+      while (unvisited.size) {
+        const current = [...unvisited].reduce((best, id) => distance[id] < distance[best] ? id : best);
+        if (distance[current] === Infinity) break;
+        unvisited.delete(current);
+        if (current === end) break;
+        for (const edge of edges) {
+          const next = edge.a === current ? edge.b : edge.b === current ? edge.a : null;
+          if (!next || !unvisited.has(next)) continue;
+          const candidate = distance[current] + edge.meters;
+          if (candidate < distance[next]) {
+            distance[next] = candidate;
+            previous[next] = current;
+          }
+        }
+      }
+      if (!Number.isFinite(distance[end])) return null;
+      const path = [];
+      for (let node = end; node !== undefined; node = previous[node]) path.unshift(node);
+      return { path, meters: distance[end] };
+    }
+    function routeInstructions(route) {
+      if (!route) return [];
+      const steps = [];
+      route.path.slice(1).forEach((b, index) => {
+        const a = route.path[index];
+        const edge = edges.find(item => (item.a === a && item.b === b) || (item.a === b && item.b === a));
+        const dx = nodes[b][0] - nodes[a][0], dy = nodes[b][1] - nodes[a][1];
+        const direction = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'east' : 'west') : (dy > 0 ? 'south' : 'north');
+        const last = steps.at(-1);
+        if (last && last.road === edge.road && last.direction === direction) last.meters += edge.meters;
+        else steps.push({ road: edge.road, direction, meters: edge.meters });
+      });
+      return steps.map(step => `Head ${step.direction} along ${step.road} for ${Math.round(step.meters)} m.`);
+    }
+    function updateRoute() {
+      state.route = shortestPath(state.start, state.destination);
+      state.steps = routeInstructions(state.route);
+      state.step = -1;
+      $('#start-location').value = state.start;
+      $('#destination').value = state.destination;
+      $('#selected-description').textContent = `${byId[state.destination].categoryName} · ${byId[state.destination].description}`;
+      $('#map-selection').textContent = `Start: ${byId[state.start].name}. Destination: ${byId[state.destination].name}.`;
+      const meters = state.route ? Math.round(state.route.meters) : 0;
+      const minutes = Math.ceil(meters / 75);
+      $('#route-summary').innerHTML = !state.route ? 'No connected route is available.' : meters === 0 ? 'You selected the same start and destination.' : `<strong>${minutes} min</strong><span>walk · ${meters} m</span>`;
+      $('#route-steps').innerHTML = state.steps.map(step => `<li>${escapeHTML(step)}</li>`).join('');
+      const points = state.route ? state.route.path.map(id => nodes[id].join(',')).join(' ') : '';
+      $$('[data-route-line]').forEach(line => line.setAttribute('points', points));
+      $$('[data-building]').forEach(building => {
+        const active = building.dataset.building === state.destination;
+        building.setAttribute('fill', active ? '#c4dcff' : '#d4e0e9');
+        building.setAttribute('stroke', active ? '#1761cf' : '#bfccd5');
+      });
+      $$('[data-map-place]').forEach(pin => {
+        pin.setAttribute('aria-pressed', String(pin.dataset.mapPlace === state.destination));
+        pin.classList.toggle('is-start', pin.dataset.mapPlace === state.start);
+      });
+      renderWalkthrough();
+      $$('#facility-list [data-destination]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.destination === state.destination)));
+    }
+
+    // CHUNK 10: The directions button advances a manual demo, not a GPS session.
+    function renderWalkthrough() {
+      const count = state.steps.length;
+      const finished = state.step >= count && count > 0;
+      $('#walk-button').disabled = !count;
+      $('#walk-button').textContent = state.step < 0 ? 'Start directions (demo) →' : finished ? 'Restart demo →' : state.step === count - 1 ? 'Finish walkthrough ✓' : 'Next step →';
+      $('#walk-status').textContent = !count ? '' : state.step < 0 ? 'Advance each step manually in this demo.' : finished ? `Demo complete: ${byId[state.destination].name}.` : `Step ${state.step + 1} of ${count}: ${state.steps[state.step]}`;
+      $('#reset-walk').hidden = state.step < 0;
+      $$('#route-steps li').forEach((item, index) => {
+        item.classList.toggle('current-step', index === state.step);
+        if (index === state.step) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      });
+    }
+
+    // CHUNK 11: Navigation, search and map events connect user actions to the state.
+    function closeMenu() {
+      $('#main-nav').classList.remove('is-open');
+      $('#menu-toggle').setAttribute('aria-expanded', 'false');
+      $('#menu-toggle').setAttribute('aria-label', 'Open navigation menu');
+    }
+    function showPage(moveFocus = true) {
+      const page = ['#explore', '#my-places'].includes(location.hash) ? 'explore' : 'home';
+      $('#home-view').hidden = page !== 'home';
+      $('#explore-view').hidden = page !== 'explore';
+      document.title = `${page === 'explore' ? 'Explore Campus' : 'Smart Campus Navigator'} — frontend draft`;
+      $$('[data-page-link]').forEach(link => {
+        if (link.dataset.pageLink === page) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+      closeMenu();
+      closeSearchResults();
+      if (!moveFocus) return;
+      if (state.pendingReveal && page === 'explore') {
+        const moveToPin = state.pendingReveal.focus;
+        state.pendingReveal = false;
+        revealDestination(moveToPin);
+        return;
+      }
+      const section = ['#about', '#contact', '#my-places'].includes(location.hash) ? location.hash : null;
+      const title = section ? $(`${section}-title`) : $(`#${page}-title`);
+      title.focus({ preventScroll: true });
+      if (section) $(section).scrollIntoView();
+      else window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    function setQuery(query) {
+      state.query = query;
+      renderCatalogue();
+    }
+    function revealDestination(moveFocus) {
+      const shell = $('[data-map="explore"]');
+      const viewport = shell.querySelector('.map-viewport');
+      const canvas = shell.querySelector('.map-canvas');
+      const place = byId[state.destination];
+      viewport.scrollTo({
+        left: place.x / 900 * canvas.clientWidth - viewport.clientWidth / 2,
+        top: place.y / 600 * canvas.clientHeight - viewport.clientHeight / 2,
+        behavior: 'instant'
+      });
+      if (moveFocus) {
+        shell.querySelector(`[data-map-place="${place.id}"]`).focus({ preventScroll: true });
+        $('.explore-map').scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
+    }
+    function selectDestination(id, moveFocus = true) {
+      if (!places.some(place => place.id === id)) return;
+      state.destination = id;
+      updateRoute();
+      closeSearchResults();
+      if (location.hash !== '#explore') {
+        state.pendingReveal = { focus: true };
+        location.hash = 'explore';
+      } else revealDestination(moveFocus);
+    }
+    function submitSearch(query) {
+      setQuery(query);
+      const matches = searchPlaces(query);
+      // Only choose automatically when the result is unambiguous.
+      if (query.trim() && matches.length === 1) selectDestination(matches[0].id);
+      else location.hash = 'explore';
+    }
+    document.addEventListener('click', event => {
+      if (!event.target.closest('[data-search-area]')) closeSearchResults();
+      const destinationButton = event.target.closest('[data-destination]');
+      if (destinationButton) {
+        const id = destinationButton.dataset.destination;
+        const fromList = !!destinationButton.closest('#facility-list');
+        // List buttons are not replaced on selection, so desktop keyboard focus stays put.
+        selectDestination(id, !fromList || window.matchMedia('(max-width: 760px)').matches);
+      }
+      const pin = event.target.closest('[data-map-place]');
+      if (pin) {
+        if (pin.dataset.mapPlace === 'main') { state.start = 'main'; updateRoute(); }
+        else selectDestination(pin.dataset.mapPlace, true);
+      }
+      const clear = event.target.closest('[data-clear-search]');
+      if (clear) {
+        const input = clear.closest('[data-search-area]').querySelector('[data-query]');
+        setQuery(''); closeSearchResults(); input.focus();
+      }
+      const reset = event.target.closest('[data-reset-filters]');
+      if (reset) {
+        const focusTarget = reset.closest('[data-search-area]')?.querySelector('[data-query]') ||
+          reset.closest('section')?.querySelector('[data-category]');
+        state.category = 'all'; setQuery(''); closeSearchResults(); focusTarget?.focus();
+      }
+      const zoom = event.target.closest('[data-zoom]');
+      if (zoom) {
+        const shell = zoom.closest('[data-map]');
+        const current = Number(shell.dataset.scale || 1);
+        const scale = zoom.dataset.zoom === 'reset' ? 1 : Math.min(2, Math.max(1, current + (zoom.dataset.zoom === 'in' ? .25 : -.25)));
+        shell.dataset.scale = scale;
+        const canvas = shell.querySelector('.map-canvas');
+        canvas.style.width = `${scale * 100}%`;
+        canvas.style.height = `${scale * 100}%`;
+        shell.querySelector('[data-zoom="out"]').disabled = scale === 1;
+        shell.querySelector('[data-zoom="in"]').disabled = scale === 2;
+        if (zoom.dataset.zoom === 'reset') shell.querySelector('.map-viewport').scrollTo(0, 0);
+      }
+    });
+    $('#hero-search').addEventListener('submit', event => { event.preventDefault(); submitSearch($('#hero-query').value); });
+    document.addEventListener('input', event => {
+      if (!event.target.matches('[data-query]')) return;
+      setQuery(event.target.value);
+      showSearchResults(event.target);
+    });
+    document.addEventListener('change', event => {
+      if (!event.target.matches('[data-category]')) return;
+      state.category = event.target.value;
+      renderCatalogue(); closeSearchResults();
+    });
+    document.addEventListener('focusin', event => {
+      if (event.target.matches('[data-query]')) showSearchResults(event.target);
+      else if (!event.target.closest('[data-search-area]')) closeSearchResults();
+    });
+    document.addEventListener('keydown', event => {
+      const area = event.target.closest('[data-search-area]');
+      if (!area) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        area.querySelector('[data-query]').focus(); closeSearchResults();
+      }
+      if (event.key === 'ArrowDown' && event.target.matches('[data-query]')) {
+        showSearchResults(event.target);
+        const first = area.querySelector('.search-results:not([hidden]) [data-destination]');
+        if (first) { event.preventDefault(); first.focus(); }
+      }
+    });
+    $('#start-location').addEventListener('change', event => { state.start = event.target.value; updateRoute(); });
+    $('#destination').addEventListener('change', event => selectDestination(event.target.value, false));
+    $('#walk-button').addEventListener('click', () => { state.step = state.step >= state.steps.length ? 0 : state.step + 1; renderWalkthrough(); });
+    $('#reset-walk').addEventListener('click', () => { state.step = -1; renderWalkthrough(); $('#walk-button').focus(); });
+
+    // CHUNK 12: Initial render. Run once after the HTML has been parsed.
+    $('#home-map').innerHTML = mapMarkup('home');
+    $('#explore-map').innerHTML = mapMarkup('explore');
+    const categoryOptions = '<option value="all">All categories</option>' + catalogue.categories.map(category => `<option value="${category.id}">${escapeHTML(category.name)}</option>`).join('');
+    $$('[data-category]').forEach(select => { select.innerHTML = categoryOptions; });
+    $('#start-location').innerHTML = locations.map(place => `<option value="${place.id}">${escapeHTML(place.name)}</option>`).join('');
+    $('#destination').innerHTML = places.map(place => `<option value="${place.id}">${escapeHTML(place.name)}</option>`).join('');
+    $$('[data-map-search]').forEach(form => form.addEventListener('submit', event => { event.preventDefault(); submitSearch(form.querySelector('input').value); }));
+    $$('[data-zoom="out"]').forEach(button => { button.disabled = true; });
+    $$('[data-catalogue-control]').forEach(control => { control.disabled = false; });
+    renderCatalogue();
+    updateRoute();
+  }());
+  </script>
+</body>
+</html>

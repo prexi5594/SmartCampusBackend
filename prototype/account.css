@@ -1,0 +1,77 @@
+/* Account controls share the established navy, blue, and pale-blue palette. */
+html.auth-pending body { visibility: hidden; }
+[hidden] { display: none !important; }
+.account-bar { background: #eef7ff; border-bottom: 1px solid #dfe7ef; color: #122e4c; }
+.account-bar-inner { max-width: 1160px; margin: auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.account-bar p { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.account-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.account-actions a, .account-actions button { color: #134fa8; font: inherit; font-size: 14px; font-weight: 700; background: none; border: none; padding: 8px 0; min-height: 44px; cursor: pointer; }
+.account-feedback { font-size: 14px; color: #5d6d7e; overflow-wrap: anywhere; }
+.account-feedback.is-error { color: #a52332; }
+.account-actions a:focus-visible, .account-actions button:focus-visible,
+.personal-places :is(input, select, textarea, button):focus-visible,
+.auth-shell :is(input, button, a):focus-visible { outline: 3px solid #88b8ff; outline-offset: 3px; }
+.personal-places { margin: 28px 0; padding: 28px; background: #eef7ff; border: 1px solid #dfe7ef; border-radius: 14px; font-size: 16px; }
+.personal-places h2 { margin: 0 0 8px; font-size: 24px; }
+.personal-places p { margin-top: 0; }
+.personal-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 28px; }
+.personal-places label { display: block; margin: 14px 0 5px; font-size: 14px; font-weight: 700; }
+.personal-places input, .personal-places select, .personal-places textarea {
+  width: 100%; min-width: 0; padding: 11px 12px; border: 1px solid #b6c8db; border-radius: 8px;
+  background: white; color: #122e4c; font: inherit; font-size: 16px;
+}
+.personal-places textarea { resize: vertical; min-height: 105px; }
+.personal-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 16px; }
+.personal-places button { min-height: 44px; }
+.personal-places .quiet { background: transparent; border: 0; color: #134fa8; font: inherit; text-decoration: underline; }
+.personal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; align-content: start; }
+.personal-list li { padding: 18px; background: white; border: 1px solid #dfe7ef; border-radius: 12px; min-width: 0; }
+.personal-list h3 { margin: 0 0 4px; font-size: 18px; overflow-wrap: anywhere; }
+.personal-list p { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; }
+.personal-list small { color: #5d6d7e; font-size: 14px; }
+.personal-list .personal-buttons { gap: 16px; margin-top: 10px; }
+.auth-body { margin: 0; background: #eef7ff; color: #122e4c; font: 16px/1.55 Arial, Helvetica, sans-serif; }
+.auth-body * { box-sizing: border-box; }
+.auth-shell { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 1440px; margin: auto; }
+.auth-intro { padding: clamp(32px, 7vw, 100px); display: flex; flex-direction: column; justify-content: center; }
+.auth-brand { display: flex; align-items: center; gap: 12px; font-weight: 700; margin-bottom: 52px; }
+.auth-brand-mark { background: #1761cf; color: white; border-radius: 12px; width: 48px; height: 48px; display: grid; place-items: center; }
+.auth-brand small { display: block; font-size: 12px; letter-spacing: 2px; font-weight: 400; }
+.auth-intro h1 { font-size: clamp(36px, 4vw, 56px); line-height: 1.08; letter-spacing: -1.5px; margin: 0 0 24px; }
+.auth-intro > p { color: #465e76; max-width: 440px; margin: 0; }
+.auth-benefits { margin: 32px 0 0; padding-left: 22px; color: #36516c; }
+.auth-benefits li { margin: 12px 0; }
+.auth-card-wrap { display: flex; align-items: center; padding: 40px; }
+.auth-card { width: 100%; max-width: 470px; background: white; border: 1px solid #dfe7ef; border-radius: 20px; padding: 36px; box-shadow: 0 12px 48px #122e4c08; }
+.auth-tabs { display: flex; gap: 8px; padding: 5px; border-radius: 10px; background: #eef3f9; margin-bottom: 28px; }
+.auth-tabs button { flex: 1; padding: 11px 8px; border: 0; border-radius: 7px; font: inherit; font-size: 14px; font-weight: 700; color: #465e76; background: transparent; cursor: pointer; }
+.auth-tabs button[aria-pressed="true"] { color: #134fa8; background: white; box-shadow: 0 1px 5px #122e4c12; }
+.auth-card h2 { margin: 0 0 8px; font-size: 28px; }
+.auth-card .intro-copy { margin: 0 0 24px; color: #5d6d7e; font-size: 14px; }
+.auth-card label { display: block; font-size: 14px; font-weight: 700; margin: 18px 0 6px; }
+.auth-card input { width: 100%; border: 1px solid #b6c8db; padding: 12px; border-radius: 8px; font: inherit; color: #122e4c; }
+.auth-card .password-hint { font-size: 14px; color: #5d6d7e; margin: 6px 0 0; }
+.auth-submit { width: 100%; margin-top: 24px; padding: 13px 18px; border: 0; border-radius: 8px; background: #1761cf; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+.auth-card button:disabled, .personal-places button:disabled { opacity: .6; cursor: wait; }
+.auth-card .account-feedback { margin: 16px 0 0; min-height: 22px; }
+.auth-footnote { border-top: 1px solid #dfe7ef; padding-top: 18px; margin: 22px 0 0; color: #5d6d7e; font-size: 14px; }
+.session-unavailable { max-width: 540px; margin: 10vh auto; padding: 28px; color: #122e4c; font: 16px/1.6 Arial, sans-serif; }
+.account-dialog { max-width: min(440px, calc(100vw - 40px)); padding: 28px; border: 1px solid #dfe7ef; border-radius: 14px; color: #122e4c; font-size: 16px; }
+.account-dialog::backdrop { background: #122e4c66; }
+.account-dialog h2 { margin-top: 0; font-size: 24px; }
+.account-dialog p { overflow-wrap: anywhere; }
+.account-dialog button { min-height: 44px; padding: 10px 16px; border-radius: 8px; font: inherit; cursor: pointer; }
+.dialog-cancel { border: 1px solid #b6c8db; background: white; color: #122e4c; }
+.dialog-delete { border: 1px solid #a52332; background: #a52332; color: white; }
+@media (max-width: 780px) {
+  .auth-shell { grid-template-columns: 1fr; }
+  .auth-intro { padding: 28px 24px 8px; }
+  .auth-brand { margin-bottom: 24px; }
+  .auth-intro h1 { font-size: 36px; margin-bottom: 16px; }
+  .auth-benefits { display: none; }
+  .auth-card-wrap { justify-content: center; padding: 24px; }
+  .auth-card { padding: 24px; }
+  .personal-layout { grid-template-columns: 1fr; }
+  .personal-places { padding: 20px; }
+  .account-bar-inner { padding: 10px 18px; }
+}

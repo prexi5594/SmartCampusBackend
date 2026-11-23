@@ -1,0 +1,15 @@
+# Allow only runtime source into the build context.
+**
+!Dockerfile
+!.dockerignore
+!backend/
+!backend/**
+!prototype/
+!prototype/**
+**/__pycache__/
+**/*.pyc
+**/.env
+**/.env.*
+**/*.sqlite3*
+**/*.db
+**/*.log

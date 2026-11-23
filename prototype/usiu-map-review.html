@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" class="auth-pending">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USIU-Africa | Campus map review</title>
+  <link rel="stylesheet" href="account.css">
+  <script src="api.js" defer></script>
+  <script src="auth-guard.js" defer></script>
+  <link rel="stylesheet" href="vendor/maplibre-gl-6.19.0/maplibre-gl.css">
+  <link rel="stylesheet" href="usiu-map-review.css">
+  <script src="usiu-directory.js" defer></script>
+  <script src="usiu-map-review.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#review-details">Skip to building details</a>
+  <header>
+    <a class="brand" href="campus-navigator.html"><span class="brand-icon" aria-hidden="true">U</span><span>Smart Campus Navigator<small>USIU-AFRICA</small></span></a>
+    <a class="back" href="campus-navigator.html">Back to homepage</a>
+  </header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">Campus geography · review draft</p><h1>Get to know USIU-Africa.</h1><p>Explore the building outlines, find a classroom and help confirm the campus layout.</p></div><span class="review-tag">Locations to confirm</span></div>
+    <div class="workspace">
+      <section class="map-column" aria-label="Campus map">
+        <div class="toolbar">
+          <div class="segmented" aria-label="Map perspective"><button id="view-2d" aria-pressed="true">2D</button><button id="view-3d" aria-pressed="false" disabled>3D</button></div>
+          <div class="segmented" aria-label="Map area"><button id="area-teaching" aria-pressed="true">Teaching area</button><button id="area-campus" aria-pressed="false">Whole campus</button></div>
+          <button id="map-reset" class="quiet">Reset view</button>
+        </div>
+        <div class="map-frame">
+          <div id="map-live" hidden aria-label="Interactive campus map"></div>
+          <div id="map-flat" role="img" aria-label="North-up campus layout. Select a building using the building selector or search."></div>
+          <span class="north" id="flat-north" aria-hidden="true">N ↑</span>
+          <div id="map-loading" class="map-message">Loading campus geography…</div>
+        </div>
+        <div class="legend" aria-label="Map legend"><span><i class="building"></i>Mapped building</span><span><i class="selected"></i>Selected building</span><span><i class="path"></i>Mapped path / road</span><span><i class="green"></i>Outdoor space</span></div>
+        <p class="map-note">Review map · Heights are illustrative unless stated. Paths show mapped connections; entrances and walking access still need confirmation.</p>
+        <p class="attribution">Map data <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors · ODbL</a>. <a href="data/usiu-geography.geojson" download>Download map data</a> · <a href="?renderer=svg">Use basic 2D map</a></p>
+        <p id="map-status" class="status" role="status" aria-live="polite"></p>
+      </section>
+      <aside aria-label="Find and review a building">
+        <section class="panel search-panel">
+          <label for="campus-query">Find a building or room</label>
+          <div class="search-row"><input type="search" id="campus-query" placeholder="Try LT4, SS12, Lab 1…" autocomplete="off" aria-controls="search-results"><button id="clear-search" class="quiet" aria-label="Clear search">Clear</button></div>
+          <div id="search-results" class="results" aria-label="Search results"></div>
+        </section>
+        <section class="panel" id="review-details" aria-label="Selected location">
+          <p class="eyebrow">Selected location</p>
+          <h2 id="detail-name">Choose a building</h2>
+          <p id="detail-note">Select a building on the map or search for a room.</p>
+          <dl id="detail-facts"></dl>
+          <p id="detail-room"></p>
+          <a id="detail-source" class="source-link" hidden target="_blank" rel="noopener">View source on OpenStreetMap</a>
+        </section>
+        <section class="panel">
+          <label for="building-picker">Inspect any mapped building</label>
+          <select id="building-picker"><option value="">Select a review number…</option></select>
+          <p class="help">Use the B-number when suggesting a correction. Unnamed outlines stay unnamed until identified.</p>
+        </section>
+        <section class="panel compact">
+          <h2>What needs your review</h2>
+          <ul><li>Confirm the four academic building matches.</li><li>Identify Wooden Block GH and check EF, IJ and KL.</li><li>Confirm entrances and permitted walking paths.</li></ul>
+          <button id="inspect-wooden" class="quiet">Inspect the Wooden Blocks area</button>
+          <p class="help">Gate points come from USIU’s commencement guidance. Their everyday access still needs checking.</p>
+          <a class="source-link" href="https://www.usiu.ac.ke/documents/find-your-class/" target="_blank" rel="noopener">Official building and room guide</a>
+        </section>
+      </aside>
+    </div>
+    <noscript><p>JavaScript is needed for this map. The official building and room guide is available above.</p></noscript>
+  </main>
+</body>
+</html>

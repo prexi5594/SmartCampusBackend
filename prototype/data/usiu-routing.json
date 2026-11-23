@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "campusId": "usiu-africa",
+  "revision": "2026-11-23-awaiting-campus-review",
+  "simulation": false,
+  "status": "awaiting-campus-review",
+  "note": "No entrances or walking connections have been verified. The OSM display map is not a routing network. Add reviewed nodes, edges and entrance destinations with evidence; do not connect building centres automatically.",
+  "nodes": [],
+  "edges": [],
+  "destinations": []
+}

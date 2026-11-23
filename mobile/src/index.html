@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102f50">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'">
+  <title>Smart Campus · Find your way</title>
+  <link rel="stylesheet" href="vendor/maplibre-gl-6.19.0/maplibre-gl.css">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#destination-query">Skip to destination search</a>
+  <header class="app-header"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">⌖</span><span>Smart Campus<small>NAVIGATOR</small></span></a><span class="campus-name" id="campus-name">USIU-AFRICA</span></header>
+  <main>
+    <div class="heading"><p class="eyebrow">YOUR CAMPUS, CONNECTED</p><h1>Your next stop,<br>made simple.</h1><p>Choose a place. Find your way.</p></div>
+    <div id="simulation-banner" class="notice simulation" hidden><strong>Simulation · fictional campus</strong><span>Test waypoints with the controls below. Your phone location is not used.</span><button id="exit-demo" class="text-button">Return to USIU</button></div>
+    <p id="fatal" class="notice" role="alert" hidden></p>
+    <div class="layout">
+      <section class="map-section" aria-label="Campus map">
+        <div class="section-heading"><h2 id="map-title">Campus overview</h2><span id="map-mode-label" class="chip">Map preview</span></div>
+        <div class="map-frame"><div id="campus-map"></div><div id="flat-map" hidden></div><div class="map-toolbar"><button id="map-reset" aria-label="Show whole campus">⌖</button><button id="map-perspective" aria-pressed="false">3D</button><button id="map-plus" aria-label="Zoom in">+</button><button id="map-minus" aria-label="Zoom out">−</button></div><span class="north" aria-hidden="true">N ↑</span></div>
+        <p id="map-message" class="small">Loading the campus map…</p>
+        <div class="legend"><span><i class="dot building-dot"></i>Buildings</span><span><i class="dot route-dot"></i>Walking route</span><span><i class="dot location-dot"></i>Your position</span></div>
+        <p class="attribution" id="attribution">Map data <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> · <a href="data/usiu-geography.geojson" download>ODbL data</a></p>
+      </section>
+      <div class="panels">
+        <section class="panel" aria-labelledby="find-title"><p class="eyebrow">WHERE ARE YOU HEADING?</p><h2 id="find-title">Find your destination</h2><label class="sr-only" for="destination-query">Search campus buildings or rooms</label><div class="search"><span aria-hidden="true">⌕</span><input id="destination-query" type="search" placeholder="Try Library, Chandaria or LT4" autocomplete="off" aria-controls="destinations" disabled></div><p class="small" id="results-count" role="status"></p><div id="destinations" class="destinations"></div></section>
+        <section class="panel route-panel" aria-labelledby="route-title"><p class="eyebrow">YOUR WALKING ROUTE</p><h2 id="route-title">Choose a destination</h2><p id="destination-detail" class="small">Search for a building or classroom to get started.</p>
+          <label for="origin">Starting location</label><select id="origin" disabled><option value="gps">My current location</option></select>
+          <div class="location-actions"><button id="locate" class="secondary" disabled>⌖ Use my location</button><button id="stop-location" class="text-button" hidden>Stop location</button></div>
+          <p class="small" id="location-status" role="status">Location is off. It is only used when you choose it.</p>
+          <p class="small" id="accuracy"></p>
+          <div class="route-stats" id="route-stats" hidden><div><strong id="eta">—</strong><span>estimated walk</span></div><div><strong id="distance">—</strong><span>remaining</span></div></div>
+          <p id="route-status" role="status" class="route-status">USIU entrances and paths need confirmation before live walking directions are available.</p>
+          <div id="guidance" class="guidance" hidden><span class="turn-icon" aria-hidden="true">↗</span><div><span id="next-distance" class="small"></span><strong id="next-instruction"></strong></div></div>
+          <button id="start" class="primary" disabled>Start directions <span aria-hidden="true">→</span></button><button id="stop" class="secondary full" hidden>Stop navigation</button>
+          <details id="steps-panel" hidden><summary>All waypoints</summary><ol id="steps"></ol></details>
+          <div id="simulation-controls" class="simulation-controls" hidden><p class="small">Simulated movement · no GPS</p><button id="demo-next" class="secondary">Move to next waypoint</button><button id="demo-drift" class="text-button">Test leaving route</button><button id="demo-weak" class="text-button">Test weak signal</button></div>
+        </section>
+        <section class="panel compact"><h2>Walk with confidence</h2><p class="small">Guidance pauses when this app leaves the screen. Location stays on this device and is not saved as a journey history.</p><p id="indoor-note" class="small">Directions will end at a confirmed building entrance. Room floors and indoor paths are not yet mapped.</p><button id="try-demo" class="text-button" disabled>Try waypoint simulation <span aria-hidden="true">→</span></button></section>
+      </div>
+    </div>
+    <p id="offline" class="notice" hidden>You are offline. Bundled maps and confirmed routes remain available; obtaining a GPS position may take longer.</p>
+    <footer>Smart Campus Navigator <span>Find your place.</span></footer>
+  </main>
+  <noscript>JavaScript is required to use campus navigation.</noscript>
+</body>
+</html>

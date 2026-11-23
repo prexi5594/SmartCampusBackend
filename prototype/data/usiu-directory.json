@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "campus": "USIU-Africa",
+  "source": "https://www.usiu.ac.ke/documents/find-your-class/",
+  "document": "https://www.usiu.ac.ke/wp-content/uploads/2026/04/Find-Your-Class-v2.pdf",
+  "checkedDate": "2026-11-21",
+  "geometryStatus": "OSM name matches are candidates awaiting campus confirmation",
+  "buildings": [
+    {
+      "id": "chandaria", "name": "Chandaria School of Business", "shortName": "Chandaria",
+      "aliases": ["CSB", "school of business"], "osmCandidates": ["way/1075663166"],
+      "rooms": ["B1", "B2", "B3", "B4", "B5", "BS1", "BS2", "B-Lab", "LT1", "LT2"]
+    },
+    {
+      "id": "science", "name": "Science Centre", "shortName": "Science Centre",
+      "aliases": ["science center", "science complex"], "osmCandidates": ["way/1075687895"],
+      "rooms": ["SC1", "SC2", "SC3", "SC4", "SC5", "SC6", "SC7", "SC8", "SC9", "LT3", "LT4", "LT5", "Lab A", "Lab B", "Lab C", "Lab D", "Lab E", "Lab F", "Lab G", "Lab H", "Lab I", "Lab J", "Lab K"]
+    },
+    {
+      "id": "beam", "name": "Lillian K. Beam Building", "shortName": "Lillian Beam",
+      "aliases": ["LKB", "Lilian Beam", "ICT Centre", "ICT Center"], "osmCandidates": ["way/1075663167"],
+      "rooms": ["Lab 1", "Lab 2", "Lab 3", "Lab 4", "G-Lab", "Lab 6", "Hardware Lab", "Software Lab"]
+    },
+    {
+      "id": "shss", "name": "School of Humanities & Social Sciences", "shortName": "SHSS",
+      "aliases": ["SHSS", "humanities", "social sciences"], "osmCandidates": ["way/1075687897"],
+      "rooms": ["SS1", "SS2", "SS3", "SS4", "SS5", "SS6", "SS7", "SS8", "SS9", "SS10", "SS11", "SS12", "SS13", "SS14", "SS15", "SS16", "SS17", "SS18", "SS19", "SR1", "SR2", "SR3", "SR4", "SR5", "LT7", "LT8"]
+    },
+    {
+      "id": "wooden", "name": "Wooden Blocks", "shortName": "Wooden Blocks",
+      "aliases": ["wooden blocks"], "osmCandidates": ["way/1417712688", "way/1417712686", "way/1075663171"],
+      "rooms": [],
+      "blocks": [
+        {"code": "EF", "osmCandidates": ["way/1417712688"]},
+        {"code": "GH", "osmCandidates": []},
+        {"code": "KL", "osmCandidates": ["way/1075663171"]},
+        {"code": "IJ", "osmCandidates": ["way/1417712686"]}
+      ]
+    }
+  ],
+  "gateSource": "https://www.usiu.ac.ke/2026-48th-commencement/",
+  "gateContext": "Published for 2026 commencement; everyday availability and exact entrance positions need confirmation",
+  "gates": [
+    {"id": "gate-a", "name": "Gate A (published point)", "coordinates": [36.87917, -1.219362]},
+    {"id": "gate-b", "name": "Gate B (published point)", "coordinates": [36.87989, -1.213888]},
+    {"id": "gate-c", "name": "Gate C (published point)", "coordinates": [36.88002, -1.208337]},
+    {"id": "gate-d", "name": "Gate D (published point)", "coordinates": [36.88205, -1.209162]}
+  ]
+}
