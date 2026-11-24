@@ -1,5 +1,14 @@
 # Current state
 
+## Repository frontend/backend integration — 24 November 2026
+
+- Owner requested connecting the repository's frontend and backend and keeping an untouched backup. The original import already uses the same-origin account/data API; this work fixes the local launcher mismatch (8080 listener versus 8765 allowed origin) and makes the full app runnable with `python -m backend`.
+- Local startup derives the listener from `CAMPUS_ORIGIN` and rejects a conflicting `PORT`. Production retains the platform port, HTTPS origin, one worker and existing storage safeguards. No frontend rewrite, API change or Railway redeployment was needed.
+- Remote backup branch `backup/before-frontend-backend-2026-11-24` preserves `d9b7a5cc55e0df60d4e1ed7e4682f35e1da4c5d5`. A verified Git bundle and ZIP of the current local source are in the workspace's `backups/` directory. The ZIP also preserves newer uncommitted map/Android work, which was left untouched in the original checkout. Integration was implemented in a separate worktree from the GitHub baseline. Backups exclude ignored databases, credentials and build artifacts.
+- Verification: all 28 Python tests passed across the suite and corrected integration-test rerun; 21 Node navigation/map tests passed. The new test executes the served `api.js` against a real local Uvicorn/Chroma backend, covering page assets, registration/login, sessions, CRUD, shared data across sessions, account isolation and logout. Test shutdown uses Uvicorn lifespan cleanup to close the disposable database on Windows.
+- Browser checks passed for registration, sign-in, saving/editing a note, persistence after reload and sign-out/sign-in, and 3D homepage loading. Measured saved-place widths 392 and 1274 CSS pixels had no horizontal overflow. Screenshot: `docs/account-review/frontend-backend-integration.jpg`. No physical-device acceptance is claimed.
+- Changed startup, integration tests and setup/status documentation. See `docs/FRONTEND_BACKEND.md` for run commands, architecture and backup restoration. Future deployment should include the separately maintained newer map/Android work; this repository-only change did not publish an older app over the live service.
+
 ## Homepage 3D map — published 23 November 2026
 
 - Owner explicitly requested implementing the current 3D map in the publicly accessible web app. This authorises publishing the labelled preview before campus validation; verified navigation remains a separate incomplete task.

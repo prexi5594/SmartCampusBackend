@@ -7,10 +7,14 @@ Implemented locally on 23 November 2026 after the owner requested ChromaDB and c
 From the project root (`C:\Users\user\Documents\SMART CAMPUS\campus-navigator-codex`), use the environment installed for this task:
 
 ```powershell
-.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8765 --workers 1 --no-proxy-headers
+.\.venv\Scripts\python.exe -m backend
 ```
 
 Open **http://127.0.0.1:8765** and choose **Create account**. Enter your name, email and a new app password of 12–128 characters. Registration signs you in. There is no default account or password. Stop the server with Ctrl+C.
+
+The launcher serves the frontend and API on the port from `CAMPUS_ORIGIN` locally.
+Use that exact URL in the browser. Production still uses the platform's `PORT`
+behind HTTPS. See [integration and backup instructions](FRONTEND_BACKEND.md).
 
 For a fresh checkout, install Python 3.11 and run these first:
 

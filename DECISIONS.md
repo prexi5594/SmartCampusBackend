@@ -1,5 +1,11 @@
 # Decisions
 
+## Repository integration — 24 November 2026
+
+- Owner explicitly requested connecting the repository frontend/backend and an untouched backup. Preserve the existing same-origin architecture: FastAPI serves `prototype/` and `/api/`, with HttpOnly sessions and account-scoped Chroma data.
+- Add `python -m backend` as the combined entry point. Local listening host/port follow `CAMPUS_ORIGIN`; a conflicting `PORT` fails before startup. Production continues to use its independent platform port behind HTTPS.
+- Preserve the original GitHub commit on `backup/before-frontend-backend-2026-11-24`, plus a verified local Git bundle and a ZIP including the newer uncommitted source. Work from the GitHub baseline in a separate worktree so unrelated local map/Android changes remain intact. No Railway deployment or Android account integration is included.
+
 ## Confirmed by the owner
 
 | Topic | Decision |

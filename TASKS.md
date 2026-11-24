@@ -4,6 +4,16 @@ Checkboxes reflect authorised work and recorded evidence. A fixture-based protot
 
 The phases below organise the owner's steps by dependency; they do not add new product features. Real-data work may require campus information. Generic interfaces may be developed with explicit fixtures after approval, but real navigation acceptance remains incomplete until verified.
 
+## Repository frontend/backend integration — 24 November 2026
+
+- [x] Preserve an untouched remote backup and verified local source backups.
+- [x] Provide a combined launcher with matching local listener/authentication origin.
+- [x] Test the shipped frontend API client against the real backend, including private saved-place CRUD, sessions and account isolation.
+- [x] Verify registration, saved-place editing/persistence and sign-out/sign-in in the browser; check phone/desktop geometry.
+- [x] Document fresh-checkout setup, API connections, test commands and backup restoration.
+
+This work covers the repository web app. It does not mark Android accounts or the later product phases complete. See `docs/FRONTEND_BACKEND.md`.
+
 ## Phase 0 — audit and plan (first Codex session)
 
 - [x] Read the project documents and inspect prototype/designs.

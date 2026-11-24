@@ -59,7 +59,9 @@ class HostedConfigurationTests(unittest.TestCase):
                         Config.from_env()
 
     def test_container_listens_on_platform_port_with_one_worker(self):
-        with patch.dict(os.environ, {"PORT": "18080", "WEB_CONCURRENCY": "8"}, clear=True):
+        environment = {"CAMPUS_ENV": "production", "CAMPUS_ORIGIN": "https://campus.example.test",
+                       "CAMPUS_DATA_DIR": "/data/campus", "PORT": "18080", "WEB_CONCURRENCY": "8"}
+        with patch.dict(os.environ, environment, clear=True):
             options = server_options()
         self.assertEqual(options["host"], "0.0.0.0")
         self.assertEqual(options["port"], 18080)
@@ -68,6 +70,23 @@ class HostedConfigurationTests(unittest.TestCase):
         with patch.dict(os.environ, {"PORT": "70000"}, clear=True):
             with self.assertRaises(ValueError):
                 server_options()
+
+    def test_local_launcher_serves_frontend_and_api_at_the_allowed_origin(self):
+        for origin, host, port in [(None, "127.0.0.1", 8765),
+                                   ("http://localhost:9876", "localhost", 9876),
+                                   ("http://[::1]:9876", "::1", 9876)]:
+            environment = {} if origin is None else {"CAMPUS_ORIGIN": origin}
+            with self.subTest(origin=origin), patch.dict(os.environ, environment, clear=True):
+                options = server_options()
+                self.assertEqual((options["host"], options["port"]), (host, port))
+                self.assertEqual(options["workers"], 1)
+
+    def test_local_launcher_rejects_a_port_that_would_break_authentication(self):
+        with patch.dict(os.environ, {"PORT": "8080"}, clear=True):
+            with self.assertRaisesRegex(ValueError, "PORT must match"):
+                server_options()
+        with patch.dict(os.environ, {"PORT": "9876", "CAMPUS_ORIGIN": "http://127.0.0.1:9876"}, clear=True):
+            self.assertEqual(server_options()["port"], 9876)
 
     def test_healthcheck_host_cannot_serve_the_app_or_api(self):
         with tempfile.TemporaryDirectory() as directory:
