@@ -104,3 +104,9 @@ Published the authenticated `/science-interior.html` review and Science/Lab H ma
 The owner authorised an assumption-based outdoor route and repeated floor layouts. Deployment `9d8acc14-4ba5-43a1-bb64-6c90ea3943c8` reached SUCCESS with the same volume, healthy startup and no pending deployment work. The homepage links to `/science-interior.html`, which now provides 19 manual checkpoints, outdoor highlighting, Ground/Floor 1/Floor 2 schematics and explicit Lab H arrival confirmation. No GPS tracking or raw video was added.
 
 27 Node tests, JavaScript syntax checks and local authentication/page checks passed. Public verification signed into the existing synthetic account, checked all three pages plus 22 assets against local bytes, and confirmed logout revocation. Browser interaction/responsive-geometry checks are recorded in `SCIENCE_INTERIOR_REVIEW.md`; physical-campus acceptance and complete visual screenshot review remain outstanding.
+
+## Supplied React wrapper — deployed 25 November 2026
+
+Deployment `0afe0609-62a1-4aae-82ea-9343f19900e3` succeeded with the original `/data` volume. New login and homepage use the supplied SmartCampusFrontend design. The existing API, account database and Chroma remain in place. Full map, Lab H guide and original controls remain linked from the wrapper. 28 Python tests, 27 Node tests, frontend build/lint, browser saved-place compatibility and public checks of 25 exact assets passed.
+
+Before packaging future changes, run `pnpm install --frozen-lockfile` and `pnpm run build` in `frontend/`. Build output is `prototype/app/`. Then run the existing Python packaging/upload commands.

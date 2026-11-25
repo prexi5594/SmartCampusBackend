@@ -2,6 +2,8 @@
 
 ## Supplied React frontend wrapper — 25 November 2026
 
+- Railway deployment `0afe0609-62a1-4aae-82ea-9343f19900e3` reached SUCCESS on 25 November 2026 with the original persistent volume. Public checks passed for existing-account login/logout, the React shell, protected original map/guide pages and 25 exact runtime assets. Package: 50 files, SHA-256 `417459dd3f06bf51429a9d653913bc1b6bb2dc54d1ac7086f073f2de5e6b69a3`.
+
 - Owner requested the design from prexi5594/SmartCampusFrontend around the existing backend, followed by Railway deployment. Imported source commit 36c215bdb5d6838d008c613ace5bd0f9b965901a into frontend/.
 - New homepage/login and saved-place UI share the existing same-origin API, session cookies, SQLite identities and private Chroma records. Registration signs in immediately. Account switching/expiry retain the existing security checks. No API/storage migration.
 - Original 2D/3D map, room search, Lab H pilot and all navigation controls remain available through prominent links. Original combined tools page is campus-tools.html; map/guide pages have matching purple accents. The supplied schematic preview remains explicitly illustrative.
