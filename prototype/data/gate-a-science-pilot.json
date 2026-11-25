@@ -1,0 +1,587 @@
+{
+  "schemaVersion": 1,
+  "id": "gate-a-science-lab-h-pilot",
+  "status": "owner-authorised-assumptions",
+  "verified": false,
+  "livePositioning": false,
+  "destination": "Lab H",
+  "floor": "First floor",
+  "gateCoordinate": [
+    36.87917,
+    -1.219362
+  ],
+  "entranceCoordinate": [
+    36.87842334891489,
+    -1.2150343242460344
+  ],
+  "entranceBasis": "Estimated nearest Science Centre footprint edge to the connected mapped path; match the actual glass doorway on arrival.",
+  "pathAssumption": "Owner instructed treating existing mapped pathways as accurate on 2026-11-24. Access and exact entrance are not field-surveyed.",
+  "coordinates": [
+    [
+      36.8791683,
+      -1.2193019
+    ],
+    [
+      36.8790617,
+      -1.2191007
+    ],
+    [
+      36.8789822,
+      -1.2190066
+    ],
+    [
+      36.8789207,
+      -1.2189281
+    ],
+    [
+      36.878895,
+      -1.2188958
+    ],
+    [
+      36.8789033,
+      -1.2188395
+    ],
+    [
+      36.8789019,
+      -1.2187955
+    ],
+    [
+      36.8789008,
+      -1.2187679
+    ],
+    [
+      36.8788999,
+      -1.2187382
+    ],
+    [
+      36.8789001,
+      -1.2187099
+    ],
+    [
+      36.8789004,
+      -1.2187029
+    ],
+    [
+      36.8789033,
+      -1.2186965
+    ],
+    [
+      36.8789059,
+      -1.2186941
+    ],
+    [
+      36.8789099,
+      -1.2186928
+    ],
+    [
+      36.8789339,
+      -1.2186914
+    ],
+    [
+      36.8789366,
+      -1.2186906
+    ],
+    [
+      36.8789392,
+      -1.2186856
+    ],
+    [
+      36.8789384,
+      -1.2186786
+    ],
+    [
+      36.8789364,
+      -1.2186683
+    ],
+    [
+      36.8789001,
+      -1.2186291
+    ],
+    [
+      36.878894,
+      -1.2186127
+    ],
+    [
+      36.8788877,
+      -1.2185922
+    ],
+    [
+      36.8788833,
+      -1.2185654
+    ],
+    [
+      36.87888,
+      -1.2185299
+    ],
+    [
+      36.8788813,
+      -1.2184954
+    ],
+    [
+      36.8788843,
+      -1.2184552
+    ],
+    [
+      36.8788915,
+      -1.2184319
+    ],
+    [
+      36.8788962,
+      -1.2184162
+    ],
+    [
+      36.8788989,
+      -1.218407
+    ],
+    [
+      36.878903,
+      -1.2184107
+    ],
+    [
+      36.8789092,
+      -1.2183424
+    ],
+    [
+      36.8789138,
+      -1.2182917
+    ],
+    [
+      36.8789179,
+      -1.2182468
+    ],
+    [
+      36.8789314,
+      -1.2180976
+    ],
+    [
+      36.878951,
+      -1.2178692
+    ],
+    [
+      36.8788812,
+      -1.2177439
+    ],
+    [
+      36.8787823,
+      -1.2176237
+    ],
+    [
+      36.8788201,
+      -1.2175629
+    ],
+    [
+      36.8788431,
+      -1.2174354
+    ],
+    [
+      36.8788541,
+      -1.2173006
+    ],
+    [
+      36.8788933,
+      -1.2169671
+    ],
+    [
+      36.8789229,
+      -1.2168112
+    ],
+    [
+      36.8788049,
+      -1.2167655
+    ],
+    [
+      36.8787984,
+      -1.2167631
+    ],
+    [
+      36.8787371,
+      -1.2167287
+    ],
+    [
+      36.8787227,
+      -1.2167123
+    ],
+    [
+      36.8786508,
+      -1.2166403
+    ],
+    [
+      36.8786261,
+      -1.2166156
+    ],
+    [
+      36.8785393,
+      -1.2165287
+    ],
+    [
+      36.8785246,
+      -1.216219
+    ],
+    [
+      36.8784722,
+      -1.2160787
+    ],
+    [
+      36.8784342,
+      -1.2159771
+    ],
+    [
+      36.8783336,
+      -1.2158159
+    ],
+    [
+      36.8782955,
+      -1.2157499
+    ],
+    [
+      36.8782314,
+      -1.215601
+    ],
+    [
+      36.8782226,
+      -1.2155775
+    ],
+    [
+      36.8782107,
+      -1.2155409
+    ],
+    [
+      36.8782127,
+      -1.2155107
+    ],
+    [
+      36.8782165,
+      -1.2154092
+    ],
+    [
+      36.8781804,
+      -1.2153176
+    ],
+    [
+      36.878192,
+      -1.2152789
+    ],
+    [
+      36.8782066,
+      -1.2152179
+    ],
+    [
+      36.8782384,
+      -1.2151487
+    ],
+    [
+      36.8782632,
+      -1.2151268
+    ],
+    [
+      36.8783518,
+      -1.2151107
+    ],
+    [
+      36.8783618,
+      -1.2151011
+    ],
+    [
+      36.8784227,
+      -1.2150423
+    ]
+  ],
+  "nodeIds": [
+    "6371571144",
+    "6268348182",
+    "6268348183",
+    "6416546815",
+    "5672326278",
+    "5672326279",
+    "5672326280",
+    "5672326281",
+    "5672326282",
+    "5672326284",
+    "6371571139",
+    "6371571140",
+    "6371571124",
+    "5672326285",
+    "6371571138",
+    "5672326286",
+    "6371571137",
+    "6371571136",
+    "5672326287",
+    "5672326288",
+    "5673057695",
+    "5673057696",
+    "5673057697",
+    "5673057698",
+    "5673057699",
+    "5673057700",
+    "6369550072",
+    "6418587231",
+    "6369550074",
+    "6269292915",
+    "6418583308",
+    "6371571294",
+    "6371571293",
+    "6371571123",
+    "6369646156",
+    "4312576824",
+    "13999945004",
+    "6371344586",
+    "6371344588",
+    "6371344587",
+    "6371344589",
+    "9265764383",
+    "9265764384",
+    "9265764385",
+    "9265764386",
+    "6371344585",
+    "5673217634",
+    "6371342084",
+    "5673217641",
+    "5673217653",
+    "6371571117",
+    "6371571116",
+    "5673217662",
+    "6369723143",
+    "5673217677",
+    "5673217678",
+    "5673217679",
+    "6416631893",
+    "6416631892",
+    "6416631891",
+    "6268569743",
+    "6371571115",
+    "6369723142",
+    "6416635284",
+    "6268569745",
+    "6416650223",
+    "9265857871"
+  ],
+  "sourceWays": [
+    "way/669387061",
+    "way/669387061",
+    "way/669387061",
+    "way/669387061",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595040457",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/595167942",
+    "way/669387065",
+    "way/669387065",
+    "way/669387065",
+    "way/669478428",
+    "way/669478428",
+    "way/680483112",
+    "way/680483112",
+    "way/432092685",
+    "way/432092688",
+    "way/432092688",
+    "way/432092688",
+    "way/432092688",
+    "way/595167940",
+    "way/595167940",
+    "way/595167940",
+    "way/595167940",
+    "way/595188613",
+    "way/595188613",
+    "way/595188613",
+    "way/595188614",
+    "way/595188615",
+    "way/595188615",
+    "way/595188615",
+    "way/595188617",
+    "way/595188617",
+    "way/595188617",
+    "way/1536820878",
+    "way/1536820877",
+    "way/684829304",
+    "way/684829304",
+    "way/684829302",
+    "way/684829301",
+    "way/684829301",
+    "way/684829301",
+    "way/684829301",
+    "way/684829301",
+    "way/684829301"
+  ],
+  "distanceMetres": 551,
+  "walkMinutes": 7.3,
+  "durationBasis": "Outdoor estimate at 75 metres/minute; indoor time excluded.",
+  "connectors": [
+    {
+      "coordinates": [
+        [
+          36.87917,
+          -1.219362
+        ],
+        [
+          36.8791683,
+          -1.2193019
+        ]
+      ],
+      "status": "assumed-gate-connection"
+    },
+    {
+      "coordinates": [
+        [
+          36.8784227,
+          -1.2150423
+        ],
+        [
+          36.87842334891489,
+          -1.2150343242460344
+        ]
+      ],
+      "status": "estimated-entrance-connection"
+    }
+  ],
+  "checkpoints": [
+    {
+      "id": "outdoor-0",
+      "coordinate": [
+        36.8791683,
+        -1.2193019
+      ],
+      "routeIndex": 0,
+      "label": "Gate A path",
+      "instruction": "From Gate A, join the highlighted campus path and head into campus.",
+      "metresToNext": 55
+    },
+    {
+      "id": "outdoor-1",
+      "coordinate": [
+        36.878895,
+        -1.2188958
+      ],
+      "routeIndex": 4,
+      "label": "Path checkpoint 1",
+      "instruction": "Bear right at this mapped bend and follow the highlighted path.",
+      "metresToNext": 121
+    },
+    {
+      "id": "outdoor-2",
+      "coordinate": [
+        36.878951,
+        -1.2178692
+      ],
+      "routeIndex": 34,
+      "label": "Path checkpoint 2",
+      "instruction": "Bear left at this mapped bend and follow the highlighted path.",
+      "metresToNext": 33
+    },
+    {
+      "id": "outdoor-3",
+      "coordinate": [
+        36.8787823,
+        -1.2176237
+      ],
+      "routeIndex": 36,
+      "label": "Path checkpoint 3",
+      "instruction": "Bear right at this mapped bend and follow the highlighted path.",
+      "metresToNext": 92
+    },
+    {
+      "id": "outdoor-4",
+      "coordinate": [
+        36.8789229,
+        -1.2168112
+      ],
+      "routeIndex": 41,
+      "label": "Path checkpoint 4",
+      "instruction": "Bear left at this mapped bend and follow the highlighted path.",
+      "metresToNext": 54
+    },
+    {
+      "id": "outdoor-5",
+      "coordinate": [
+        36.8785393,
+        -1.2165287
+      ],
+      "routeIndex": 48,
+      "label": "Path checkpoint 5",
+      "instruction": "Bear right at this mapped bend and follow the highlighted path.",
+      "metresToNext": 34
+    },
+    {
+      "id": "outdoor-6",
+      "coordinate": [
+        36.8785246,
+        -1.216219
+      ],
+      "routeIndex": 49,
+      "label": "Path checkpoint 6",
+      "instruction": "Follow the highlighted campus path.",
+      "metresToNext": 83
+    },
+    {
+      "id": "outdoor-7",
+      "coordinate": [
+        36.8782107,
+        -1.2155409
+      ],
+      "routeIndex": 56,
+      "label": "Path checkpoint 7",
+      "instruction": "Follow the highlighted campus path.",
+      "metresToNext": 37
+    },
+    {
+      "id": "outdoor-8",
+      "coordinate": [
+        36.8782066,
+        -1.2152179
+      ],
+      "routeIndex": 61,
+      "label": "Path checkpoint 8",
+      "instruction": "Bear right at this mapped bend and follow the highlighted path.",
+      "metresToNext": 33
+    },
+    {
+      "id": "outdoor-9",
+      "coordinate": [
+        36.8784227,
+        -1.2150423
+      ],
+      "routeIndex": 66,
+      "label": "Science Centre approach",
+      "instruction": "At the Science Centre approach, locate the glass entrance and staircase shown in the indoor guide. The entrance pin is estimated.",
+      "metresToNext": null
+    }
+  ],
+  "floorAssumption": "Ground and floor 2 reuse the schematic first-floor corridor at owner request. Room count, outlines and positions are illustrative; only Lab H has a confirmed label and floor.",
+  "floors": [
+    {
+      "id": "ground",
+      "label": "Ground floor",
+      "basis": "assumed-repeat"
+    },
+    {
+      "id": "1",
+      "label": "First floor",
+      "basis": "video-derived-schematic"
+    },
+    {
+      "id": "2",
+      "label": "Floor 2",
+      "basis": "assumed-repeat"
+    }
+  ]
+}

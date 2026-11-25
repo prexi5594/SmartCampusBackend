@@ -237,7 +237,7 @@ class AccountIntegrationTests(unittest.TestCase):
         self.register()
         for path in ["/backend/main.py", "/private-data/accounts.sqlite3", "/.env", "/CURRENT_STATE.md"]:
             self.assertEqual(self.client.get(path).status_code, 404)
-        page = self.client.get("/campus-navigator.html")
+        page = self.client.get("/campus-tools.html")
         self.assertEqual(page.status_code, 200)
         self.assertIn('id="saved-place-form"', page.text)
         self.assertEqual(page.headers["cache-control"], "no-store")

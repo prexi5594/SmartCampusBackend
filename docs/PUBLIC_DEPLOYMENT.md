@@ -1,6 +1,6 @@
 # Public web app with persistent ChromaDB
 
-Live on 23 November 2026: **[Smart Campus Navigator](https://smart-campus-web-production-7dd97290.up.railway.app)**.
+Live since 23 November 2026, updated 24 November: **[Smart Campus Navigator](https://smart-campus-web-production-7dd97290.up.railway.app)**.
 
 Create an account with your name, email and an app password of at least 12 characters. Sign into the same account on another device to retrieve your saved places and notes. Hosting runs independently of this computer. Local-development accounts are separate and were not uploaded.
 
@@ -21,7 +21,7 @@ Create an account with your name, email and an app password of at least 12 chara
 | Limits | 1 GB RAM, 1 vCPU; sleeping enabled |
 | Health | `/health`, 300-second startup timeout |
 | Restart / shutdown | On failure, 5 retries; 30-second drain, 25-second application shutdown |
-| Verified deployment | `8d30bdd3-b8bb-4e63-aa60-6beb37124994` |
+| Verified deployment | `9d8acc14-4ba5-43a1-bb64-6c90ea3943c8` |
 
 Settings were applied directly through Railway. The prepared `railway.json` was removed before upload: the CLI and [migration documentation](https://docs.railway.com/infrastructure-as-code#migrating-from-config-as-code) report retirement of that format on 1 December 2026. Service settings persist independently of source uploads. This service has no GitHub source or automatic push deployment.
 
@@ -62,7 +62,7 @@ Expand-Archive -LiteralPath 'dist/deploy/smart-campus-railway.zip' -DestinationP
 
 Wait for deployment `SUCCESS`, inspect logs and verify `/health` plus sign-in before reporting completion. Keep the existing volume. Volume-backed redeployments have a brief interruption; there are no concurrent replicas.
 
-Current ZIP: 35 runtime files, 551364 bytes, SHA-256 `0328b88bb2859dce7f5c453605cdb2be4d1d21a66f1f0b7f124368b2c0792198`. It excludes private databases, credentials, environments, documentation/test tools and Android assets. Regenerate after runtime changes; the checksum will change.
+Current ZIP: 41 runtime files, 563465 bytes, SHA-256 `6d550788c9ea90d364efd157a78ca40a2ca104bc2e79f33215049d7cd19c31f2`. It excludes private databases, credentials, environments, documentation/test tools and Android assets. Regenerate after runtime changes; the checksum will change.
 
 ## Verification performed
 
@@ -94,3 +94,13 @@ Repeat the read-only map/page checks (with login/logout of the existing syntheti
 ```
 
 The script reads only ignored synthetic account credentials; never upload that state file. For local checks use `--origin http://127.0.0.1:8765`; this creates an isolated test account in the running local backend.
+
+## Science Centre review — 24 November 2026
+
+Published the authenticated `/science-interior.html` review and Science/Lab H map link. Deployment `32341c33-a67a-4db2-a8f9-168f11c85c17` reached SUCCESS. Public authentication and three pages/20 assets matched local source. 48 automated tests passed. See `SCIENCE_INTERIOR_REVIEW.md` for visual evidence and limitations. No raw footage, frame images, metric route or live indoor navigation was published.
+
+## Gate A to first-floor Lab H pilot — 24 November 2026 follow-up
+
+The owner authorised an assumption-based outdoor route and repeated floor layouts. Deployment `9d8acc14-4ba5-43a1-bb64-6c90ea3943c8` reached SUCCESS with the same volume, healthy startup and no pending deployment work. The homepage links to `/science-interior.html`, which now provides 19 manual checkpoints, outdoor highlighting, Ground/Floor 1/Floor 2 schematics and explicit Lab H arrival confirmation. No GPS tracking or raw video was added.
+
+27 Node tests, JavaScript syntax checks and local authentication/page checks passed. Public verification signed into the existing synthetic account, checked all three pages plus 22 assets against local bytes, and confirmed logout revocation. Browser interaction/responsive-geometry checks are recorded in `SCIENCE_INTERIOR_REVIEW.md`; physical-campus acceptance and complete visual screenshot review remain outstanding.

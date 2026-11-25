@@ -1,7 +1,9 @@
 # Smart Campus Android app
 
+Updated 24 November: the APK includes the latest Gate A → Lab H manual guide and three floor diagrams, bundled from the shared web sources. Web accounts remain on the hosted service. Run `scripts/release-android.ps1` to refresh the verified download; see `releases/README.md`. Earlier verification details below describe the initial 0.1.0 build.
+
 Android-first Capacitor app authorised on 23 November 2026. A debug-signed APK
-has been built and verified at `releases/SmartCampus-0.1.0-debug.apk` (5.48 MB).
+has been built and verified at `releases/SmartCampus-latest-debug.apk` (version 0.1.1, 5.49 MB).
 See `releases/README.md` to install it. It has not been tested on a physical phone
 and is not a production campus navigation release.
 
@@ -85,7 +87,7 @@ node node_modules/@capacitor/cli/bin/capacitor open android
 With Java/SDK configured, `android/gradlew.bat assembleDebug --no-daemon` also
 works from the `android` folder. Build output, relative to `mobile`:
 `android/app/build/outputs/apk/debug/app-debug.apk`.
-The `releases` folder contains a verified copy of the 23 November build and a
+The `releases` folder contains the latest verified build and a
 SHA-256 file. It is not automatically refreshed by rebuilding. Android Studio
 itself was not installed. Release signing, Google Play publication, iOS and
 web-to-phone transfer are not configured.

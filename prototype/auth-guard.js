@@ -24,7 +24,7 @@
     return user;
   }).catch(error => {
     if (error.status === 401) {
-      const next = ['/campus-navigator.html', '/usiu-map-review.html'].includes(location.pathname) ? location.pathname : '/campus-navigator.html';
+      const next = ['/campus-navigator.html', '/usiu-map-review.html', '/science-interior.html'].includes(location.pathname) ? location.pathname : '/campus-navigator.html';
       location.replace('/login.html?next=' + encodeURIComponent(next));
     } else {
       const section = document.createElement('main');

@@ -1,0 +1,29 @@
+{
+  "version": "0.1.1",
+  "sha256": "1741a21758413323c01ba754a661d2b04616ab797cc7359a6fae6194bd21e781",
+  "bytes": 5491450,
+  "verifiedAssets": 21,
+  "assets": {
+    "app.js": "114f4c909c031fc82bc4e4f75390bbd5114646de5caee82435919381e959d5f3",
+    "app.js.map": "49a61248899c87a6d47af668ae46b0ccc333ebb2ed8c798d3f873ccbd0686cb7",
+    "data/gate-a-science-pilot.json": "f5eb8ab2b66ae53a04c6553879ced25e798eeaac371d7074bf6b0c03434d0f62",
+    "data/science-lab-h.json": "ab680058610b0afe223cb6a136bf111904e2bf0a282f2e2febb479a025a8fc32",
+    "data/usiu-directory.json": "35dee6776a181cf0f6302a466f1d34d398eea3f2abbcaaa4f35a4ee59fdaf4a9",
+    "data/usiu-geography.geojson": "c71988915a875dc0153d342804c89dc562f71fabc9ce6985d9a641fdc18984fe",
+    "data/usiu-map-sources.json": "a9a542236b87547648842e7ea3691054434ae7fc5380a1e374da4314eaf73ad3",
+    "data/usiu-routing.json": "a1a855ffdad12a3b13d5ddaa66002741289833654634553b88f9402477a7e178",
+    "data/USIU_DATA_LICENSE.md": "51df906f6e71d561ea53fdada12169da7a871ad18812da57d4c9b6480bb39b85",
+    "index.html": "8216eaf82f36fd81cdecf8dfc443ae83b9d195a0ce39e00c34f943b7d015b7ba",
+    "pilot-guide.js": "2564794bcf4a74e726cb0fcbbac813259801d8f2b8bcd3ff544b81c4c1340f18",
+    "science-interior.css": "7325d1267db295eceac0940b1aa3c8950db81dfadc021984cd00942f8732a448",
+    "science-interior.html": "bf7150fa6317382a7dea419dd859320be4aca534579ce67a9622cac2a1bcc491",
+    "science-interior.js": "9495c05b823b5801989eea1d1a4e5218cf3a031a23fb7f2d6359f02a97898cd7",
+    "styles.css": "0e67af37782e86f223dc3b2f44d911f4ded7f6b333c18ee5fc981dc74cc03ed6",
+    "usiu-directory.js": "2ec6f3124214c844afe24ae1698e647aba81852ac9bb45ae0514640103fcb30d",
+    "vendor/maplibre-gl-6.19.0/LICENSE.txt": "ee5fc05a0677eaf69601d2c7db0d9ecd6cc27c3abc1d0733bc9ed34707cf8ef2",
+    "vendor/maplibre-gl-6.19.0/maplibre-gl-shared.mjs": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/maplibre-gl-6.19.0/maplibre-gl-worker.mjs": "c8564c4a4147326a587c9cc4c2a871c4b02a6c37c3f1ea51da55be3220d4b112",
+    "vendor/maplibre-gl-6.19.0/maplibre-gl.css": "a90798a1953017790e590f7e1bd35ff103a8a4263972cb47290b78adf86f8c20",
+    "vendor/maplibre-gl-6.19.0/maplibre-gl.mjs": "01590c9875ea5bb0e8cdc534479f607f7d1695ca5debbccaf730edf5fa5f39e5"
+  }
+}

@@ -74,6 +74,7 @@ function calculate() {
   } catch (error) { status(error.message); }
 }
 function selectPlace(place) {
+  $('selected-pilot').hidden = simulated() || !/science|lab h/i.test(place.name);
   const wasActive = active;
   selected = place; clearRoute(); map.select(place);
   $('route-title').textContent = place.name;
@@ -163,6 +164,7 @@ function startNavigation() {
 }
 async function switchCampus(data) {
   await stopNavigation(); campus = data; validateNetwork(campus.network); selected = null;
+  $('pilot-panel').hidden = simulated(); $('selected-pilot').hidden = true;
   $('simulation-banner').hidden = !simulated(); $('attribution').hidden = simulated(); $('try-demo').hidden = simulated();
   $('campus-name').textContent = simulated() ? 'SIMULATION' : 'USIU-AFRICA';
   $('map-title').textContent = simulated() ? 'Fictional campus' : 'Campus overview';
@@ -181,6 +183,11 @@ async function switchCampus(data) {
   else status('USIU entrances and paths need confirmation before live walking directions are available.');
 }
 $('destination-query').oninput = renderResults;
+for (const link of document.querySelectorAll('.pilot-link')) link.addEventListener('click', async event => {
+  event.preventDefault();
+  await stopNavigation();
+  window.location.assign(link.href);
+});
 $('destination-query').onkeydown = event => { if (event.key === 'ArrowDown') { event.preventDefault(); $('destinations').querySelector('button')?.focus(); } };
 $('origin').onchange = async () => { await stopLocation(); calculate(); };
 $('locate').onclick = locate;

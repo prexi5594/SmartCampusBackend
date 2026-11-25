@@ -7,7 +7,7 @@ from urllib.parse import urlsplit, quote
 
 from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from starlette.concurrency import run_in_threadpool
@@ -143,7 +143,7 @@ class RequestPolicy:
         scope.setdefault("state", {})["user"] = user
         if user is None and (path == "/" or (path.endswith(".html") and path != "/login.html")):
             # Only retain known page paths; never reflect an arbitrary redirect URL.
-            destination = path if path in {"/campus-navigator.html", "/usiu-map-review.html"} else "/campus-navigator.html"
+            destination = path if path in {"/campus-navigator.html", "/usiu-map-review.html", "/science-interior.html", "/campus-tools.html"} else "/campus-navigator.html"
             response = RedirectResponse("/login.html?next=" + quote(destination, safe=""), status_code=303)
             return await response(scope, downstream_receive, send_secure)
         await self.app(scope, downstream_receive, send_secure)
@@ -278,6 +278,12 @@ def create_app(config=None):
     def delete_record(namespace: Namespace, key: RecordKey, user: User):
         if not app.state.data.delete(user["id"], namespace, key):
             raise HTTPException(404, "This record was not found.")
+
+    @app.get("/login.html")
+    @app.get("/campus-navigator.html")
+    def frontend_page(request: Request):
+        built = WEB_ROOT / "app" / "index.html"
+        return FileResponse(built if built.is_file() else WEB_ROOT / request.url.path.lstrip("/"))
 
     # Only frontend assets are served. Neither the repository nor private-data is mounted.
     app.mount("/", StaticFiles(directory=WEB_ROOT), name="frontend")

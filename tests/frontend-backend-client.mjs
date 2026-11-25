@@ -1,6 +1,7 @@
 // Run by test_frontend_backend.py against its disposable backend, never production.
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
+import { readFileSync } from 'node:fs';
 
 const origin = process.argv[2];
 assert.match(origin, /^http:\/\/127\.0\.0\.1:\d+$/);
@@ -31,7 +32,10 @@ function browserClient() {
     return response;
   }
   const context = vm.createContext({ window: {}, location, fetch: browserFetch, AbortSignal });
-  vm.runInContext(source, context, { filename: 'api.js' });
+  const reactClient = readFileSync(new URL('../frontend/src/services/campusApi.js', import.meta.url), 'utf8').replace('export default campusApi;', 'window.CampusApi = campusApi;');
+  context.window.dispatchEvent = () => redirects.push('/login.html?expired=1');
+  context.Event = Event;
+  vm.runInContext(reactClient, context, { filename: 'campusApi.js' });
   return { api: context.window.CampusApi, fetch: browserFetch, redirects };
 }
 
@@ -40,8 +44,8 @@ const credentials = { email: 'integration-alice@example.test', password: 'synthe
 const loginPage = await alice.fetch('/login.html');
 assert.equal(loginPage.status, 200);
 const loginHtml = await loginPage.text();
-assert.match(loginHtml, /src="api.js"/);
-assert.match(loginHtml, /src="login.js"/);
+assert.match(loginHtml, /id="root"/);
+assert.match(loginHtml, /\/app\/assets\//);
 await assert.rejects(alice.api.request('/auth/session'), error => error.status === 401);
 const guarded = await alice.fetch('/campus-navigator.html', { redirect: 'manual' });
 assert.equal(guarded.status, 303);
@@ -51,7 +55,7 @@ const { user } = await alice.api.request('/auth/register', {
 });
 alice.api.setUser(user);
 assert.equal((await alice.api.request('/auth/session')).user.id, user.id);
-for (const page of ['/campus-navigator.html', '/usiu-map-review.html']) {
+for (const page of ['/campus-tools.html', '/usiu-map-review.html']) {
   const response = await alice.fetch(page);
   assert.equal(response.status, 200);
   const html = await response.text();

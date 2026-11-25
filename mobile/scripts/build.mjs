@@ -2,6 +2,7 @@ import { build } from 'esbuild';
 import { cp, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { bundleGuide } from './bundle-guide.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'dist');
 await mkdir(out, { recursive: true });
@@ -11,5 +12,6 @@ await mkdir(path.join(out, 'data'), { recursive: true });
 for (const name of ['usiu-directory.json', 'usiu-geography.geojson', 'usiu-map-sources.json', 'usiu-routing.json', 'USIU_DATA_LICENSE.md'])
   await cp(path.join(root, '../prototype/data', name), path.join(out, 'data', name));
 await cp(path.join(root, '../prototype/usiu-directory.js'), path.join(out, 'usiu-directory.js'));
+await bundleGuide(path.join(root, '../prototype'), out);
 await cp(path.join(root, '../prototype/vendor/maplibre-gl-6.19.0'), path.join(out, 'vendor/maplibre-gl-6.19.0'), { recursive: true });
 console.log('Built Android web assets in mobile/dist. No remote map service or student data included.');

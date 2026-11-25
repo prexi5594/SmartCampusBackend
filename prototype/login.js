@@ -4,7 +4,7 @@
   let register = false;
   const params = new URLSearchParams(location.search);
   const requestedPage = params.get('next');
-  const next = ['/campus-navigator.html', '/usiu-map-review.html'].includes(requestedPage) ? requestedPage : '/campus-navigator.html';
+  const next = ['/campus-navigator.html', '/usiu-map-review.html', '/science-interior.html'].includes(requestedPage) ? requestedPage : '/campus-navigator.html';
 
   function message(text, error = false) {
     $('auth-message').textContent = text;

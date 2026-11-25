@@ -4,16 +4,6 @@ Checkboxes reflect authorised work and recorded evidence. A fixture-based protot
 
 The phases below organise the owner's steps by dependency; they do not add new product features. Real-data work may require campus information. Generic interfaces may be developed with explicit fixtures after approval, but real navigation acceptance remains incomplete until verified.
 
-## Repository frontend/backend integration — 24 November 2026
-
-- [x] Preserve an untouched remote backup and verified local source backups.
-- [x] Provide a combined launcher with matching local listener/authentication origin.
-- [x] Test the shipped frontend API client against the real backend, including private saved-place CRUD, sessions and account isolation.
-- [x] Verify registration, saved-place editing/persistence and sign-out/sign-in in the browser; check phone/desktop geometry.
-- [x] Document fresh-checkout setup, API connections, test commands and backup restoration.
-
-This work covers the repository web app. It does not mark Android accounts or the later product phases complete. See `docs/FRONTEND_BACKEND.md`.
-
 ## Phase 0 — audit and plan (first Codex session)
 
 - [x] Read the project documents and inspect prototype/designs.
@@ -52,8 +42,20 @@ Review preparation authorised 21 November 2026:
 - [ ] Identify and verify building entrances and allowed walking connections.
 - [x] Check the review page at representative phone/tablet widths, including room selection and the explicitly selected basic SVG mode (see verification limits in CURRENT_STATE.md).
 - [x] Integrate and publish the current labelled 3D preview on the homepage (owner explicitly authorised publication before campus validation on 23 November).
-- [ ] Visually verify the integrated homepage on desktop/phone; browser automation timed out.
+- [ ] Complete visual acceptance of the integrated homepage on desktop/phone; search, 3D loading and SVG route interactions passed on 24 November, but browser screenshots were cropped by the capture service.
 - [ ] Validate campus locations and entrances before promoting the preview to verified navigation.
+
+Science Centre pilot prioritised 24 November 2026:
+
+- [x] Inspect supplied hallway video; record user-confirmed entrance and first-floor label.
+- [x] Add nine evidence-linked checkpoints and a labelled indoor review diagram, linked from Science/Lab H selection.
+- [x] Implement the owner-authorised assumed Gate A path, estimated Science entrance connection and combined 19-checkpoint guide.
+- [x] Add Ground, Floor 1 and Floor 2 schematics with unnamed room placeholders; retain Lab H only on Floor 1.
+- [x] Add manual start/entrance handoff, previous/next/stop and explicit destination confirmation; verify floor switching, room selection and SVG fallback in-browser.
+- [x] Publish the assumed pilot to the existing public app and verify deployed pages/assets and authentication (24 November, deployment `9d8acc14-4ba5-43a1-bb64-6c90ea3943c8`).
+- [ ] Map and validate Gate A to the recorded Science entrance with outdoor evidence and coordinates.
+- [ ] Resolve other room labels, dimensions and unrecorded branches for the floor map.
+- [ ] Walk the full journey on campus to validate the assumed entrance/paths, recorded instructions and manual confirmations before verified navigation acceptance.
 
 Indoor extension requested 23 November 2026:
 
@@ -76,6 +78,8 @@ The review page is not navigation acceptance. No interior map can be derived fro
 Acceptance: verified sample journeys follow connected permitted paths; distance/time assumptions are disclosed; unreachable locations have no fabricated route. Test identical start/end, unavailable paths, permission denial and destination changes. Real map accuracy is reviewed against campus evidence.
 
 ## Phase 2B — phone app and route transfer (part of owner Step 2)
+
+- [x] Refresh Android download with the latest Lab H pilot/floor guide and verify version 0.1.1; add a repeatable release command (24 November 2026).
 
 - [x] Resolve existing/new app and target mobile platforms: new Android-first app, owner confirmed 23 November 2026.
 - [x] Approve phone architecture: Capacitor with the existing JavaScript map/data.
@@ -181,3 +185,10 @@ Acceptance: a supported physical phone receives a scheduled test reminder at the
 - [ ] Record supported devices, known limitations, run/build/test commands and remaining campus data gaps.
 
 Complete only the implementation phases the owner authorises. Deployment and external release are separate from this initial handoff.
+
+## Supplied frontend wrapper — 25 November 2026
+
+- [x] Back up source and integrate supplied React design with existing accounts/storage.
+- [x] Preserve campus map, guide and navigation tools and compatible saved records.
+- [x] Build and lint frontend; verify account/API integration and browser saved-place compatibility.
+- [ ] Complete full visual/physical-device acceptance.

@@ -1,10 +1,14 @@
 # Decisions
 
-## Repository integration — 24 November 2026
+## Supplied React frontend wrapper — 25 November 2026
 
-- Owner explicitly requested connecting the repository frontend/backend and an untouched backup. Preserve the existing same-origin architecture: FastAPI serves `prototype/` and `/api/`, with HttpOnly sessions and account-scoped Chroma data.
-- Add `python -m backend` as the combined entry point. Local listening host/port follow `CAMPUS_ORIGIN`; a conflicting `PORT` fails before startup. Production continues to use its independent platform port behind HTTPS.
-- Preserve the original GitHub commit on `backup/before-frontend-backend-2026-11-24`, plus a verified local Git bundle and a ZIP including the newer uncommitted source. Work from the GitHub baseline in a separate worktree so unrelated local map/Android changes remain intact. No Railway deployment or Android account integration is included.
+- Owner requested the design from prexi5594/SmartCampusFrontend around the existing backend, followed by Railway deployment. Imported source commit 36c215bdb5d6838d008c613ace5bd0f9b965901a into frontend/.
+- New homepage/login and saved-place UI share the existing same-origin API, session cookies, SQLite identities and private Chroma records. Registration signs in immediately. Account switching/expiry retain the existing security checks. No API/storage migration.
+- Original 2D/3D map, room search, Lab H pilot and all navigation controls remain available through prominent links. Original combined tools page is campus-tools.html; map/guide pages have matching purple accents. The supplied schematic preview remains explicitly illustrative.
+- Source backup: ../backups/frontend-wrapper-before-20261125.zip. Earlier untouched GitHub backup branch remains available.
+- Build: cd frontend; pnpm install --frozen-lockfile; pnpm run build. Vite writes prototype/app/; the existing Docker package serves these compiled files. Node is not needed in production. Run the complete app with python -m backend.
+- Verification: backend suite 28 tests passed; frontend build/lint passed. Browser registration, new saved-place creation, and reading that same save through the original tools and back through the new UI passed. Desktop DOM width 1274 had no overflow; screenshot capture was cropped, limiting complete visual QA. Physical-device checks remain open.
+
 
 ## Confirmed by the owner
 
@@ -56,6 +60,8 @@ Only ask questions that materially affect the current phase. A mobile decision c
 
 ## Android implementation decisions — 23 November 2026
 
+- **24 November update:** owner requested the latest downloadable app. Bundle the shared assumption-based Lab H guide locally and retain native GPS features. Keep web accounts on the existing hosted service. Publish a stable `SmartCampus-latest-debug.apk` alongside versioned archives and verify every bundled file during releases.
+
 - Owner requested device-location navigation and selected Android first with Capacitor, then asked to continue. Keep the web prototype and add the native project in `mobile`, with pure routing/location-session modules in `shared`.
 - Reuse vendored MapLibre and campus geometry. Pin Capacitor Core/Android/CLI 8.6.2, App 8.1.2, Geolocation 8.2.5 and esbuild 0.28.2 locally. No paid provider or framework migration is added. The phone app does not use the separate web-account backend yet.
 - First version uses foreground guidance. Stop and leaving the screen cancel location use; physical-device confirmation remains required. No background-location permission/service is configured.
@@ -65,6 +71,10 @@ Only ask questions that materially affect the current phase. A mobile decision c
 - Owner subsequently approved: **"I accept the SDK licence; continue with the APK build"**. Prepare Java 21, Android SDK 36/build-tools/platform-tools and Gradle inside ignored `mobile/.android-tools`, without global environment changes. Verify official download checksums. This authorises local debug APK compilation, not Play Store release or public deployment.
 
 ## USIU map decisions and open validation — November 2026
+
+- **2026-11-24 follow-up:** Owner explicitly instructed treating the displayed pathways as accurate, repeating the filmed first-floor layout on other levels, adding unnamed rooms and making Gate A → Floor 1, Lab H work. This authorises an assumption-based pilot now, superseding the earlier review-only restriction for this journey. Implement Ground, Floor 1 and Floor 2 schematics; label Lab H only on Floor 1 and leave all other room identities unknown. Use connected mapped paths with estimated gate/entrance connectors, visibly distinguished from the source video evidence. Manual checkpoints and explicit arrival confirmation provide progress without claiming GPS or surveyed indoor geometry. Keep the verified mobile routing dataset and Android APK unchanged. Publish to the already-authorised Railway app with the existing volume.
+
+- **2026-11-24:** Owner prioritised Gate A → Science Centre → Lab H and supplied a hallway video, confirming its starting entrance and the first-floor label. Science replaces Chandaria as the immediate indoor pilot. Preserve observed stairs and readable Lab H signage; use a clearly labelled sequence diagram until physical dimensions and the outdoor route are available. Publish only the review data/UI in the existing app, with no raw footage, inferred GPS positions or invented room labels. A real navigation claim requires subsequent campus validation and suitable indoor checkpoint confirmation.
 
 - **2026-11-23:** Owner requested the current map on the public web app. Publish the existing geographic preview on the homepage now, retaining illustrative-height and unverified-location/access notices. Use native page markup with scoped styles, preserving frame protections and authentication; no new host or paid service. This supersedes waiting for campus validation before preview integration, but does not authorise fabricated routes/interiors.
 

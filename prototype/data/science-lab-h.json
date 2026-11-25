@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "id": "science-entrance-lab-h",
+  "buildingId": "science",
+  "destinationCode": "Lab H",
+  "destinationName": "Biomedical Research Lab",
+  "floorLabel": "First floor",
+  "floorBasis": "User confirmed on 2026-11-24; level changes remain explicit in the route.",
+  "status": "video-derived-draft",
+  "coverage": "Recorded entrance-to-Lab-H journey only; not a complete floor plan.",
+  "coordinateSystem": "topological-only",
+  "distanceMetres": null,
+  "durationSeconds": null,
+  "livePositioning": false,
+  "stepFree": false,
+  "navigationReady": false,
+  "gateALeg": {
+    "status": "missing-evidence",
+    "connected": false
+  },
+  "entrance": {
+    "userConfirmed": true,
+    "geographicCoordinate": null
+  },
+  "source": {
+    "filename": "USIU School of Science Tour.mp4",
+    "sha256": "a82b76ae6171ef8c14ba87407fe0c9d4ced92d50e4fd2d43d3d80fc8260c78ff",
+    "durationSeconds": 100.966667,
+    "reviewDate": "2026-11-24",
+    "method": "Visual inspection of extracted video frames; audio not transcribed. Timestamps are approximate review references, not walking times."
+  },
+  "waypoints": [
+    {
+      "id": "entrance",
+      "label": "Science Centre entrance",
+      "videoSeconds": [
+        0,
+        5
+      ],
+      "instruction": "Start at the glass doorway shown at the beginning of the recording. The user confirms this is the entrance to use from Gate A.",
+      "kind": "entrance"
+    },
+    {
+      "id": "stairs-up",
+      "label": "Main staircase",
+      "videoSeconds": [
+        5,
+        24
+      ],
+      "instruction": "Go up the staircase ahead, following the turning landing and the second flight to the upper landing.",
+      "kind": "stairs-up"
+    },
+    {
+      "id": "landing",
+      "label": "Upper landing and counter",
+      "videoSeconds": [
+        24,
+        40
+      ],
+      "instruction": "Follow the landing beside the metal railing to the curved counter. Join the corridor extending past the counter and blue noticeboard.",
+      "kind": "landing"
+    },
+    {
+      "id": "glass-corridor",
+      "label": "Corridor with glass partitions",
+      "videoSeconds": [
+        40,
+        56
+      ],
+      "instruction": "Continue along the corridor, passing the glass partitions and the blue noticeboard. Other room labels are not reliably readable in this recording.",
+      "kind": "corridor"
+    },
+    {
+      "id": "descent-one",
+      "label": "First descending steps",
+      "videoSeconds": [
+        56,
+        65
+      ],
+      "instruction": "Use the descending steps beside the red patterned screen and handrail, then continue along the corridor.",
+      "kind": "stairs-down"
+    },
+    {
+      "id": "middle-corridor",
+      "label": "Middle corridor",
+      "videoSeconds": [
+        65,
+        82
+      ],
+      "instruction": "Continue along the corridor past the doors on both sides toward the next section of steps.",
+      "kind": "corridor"
+    },
+    {
+      "id": "descent-two",
+      "label": "Second descending steps",
+      "videoSeconds": [
+        82,
+        88
+      ],
+      "instruction": "Use the second short section of descending steps beside another red patterned screen.",
+      "kind": "stairs-down"
+    },
+    {
+      "id": "lab-approach",
+      "label": "Lab corridor",
+      "videoSeconds": [
+        88,
+        95
+      ],
+      "instruction": "Continue beyond the steps. Look for the wooden double doors on your left with glass panels.",
+      "kind": "corridor"
+    },
+    {
+      "id": "lab-h",
+      "label": "Lab H — Biomedical Research Lab",
+      "videoSeconds": [
+        95,
+        100.966667
+      ],
+      "instruction": "Identify the door by the LAB H / Biomedical Research Lab sign. Stop at the doorway; entry permission is not established by this video.",
+      "kind": "destination"
+    }
+  ],
+  "connections": [
+    {
+      "from": "entrance",
+      "to": "stairs-up",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "stairs-up",
+      "to": "landing",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "landing",
+      "to": "glass-corridor",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "glass-corridor",
+      "to": "descent-one",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "descent-one",
+      "to": "middle-corridor",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "middle-corridor",
+      "to": "descent-two",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "descent-two",
+      "to": "lab-approach",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    },
+    {
+      "from": "lab-approach",
+      "to": "lab-h",
+      "evidenceStatus": "video-observed",
+      "accessStatus": "not-field-validated",
+      "distanceMetres": null
+    }
+  ],
+  "unresolved": [
+    "Gate A to the recorded entrance: outdoor path, crossings and coordinates",
+    "Entrance location on the geographic footprint",
+    "Room labels/door positions other than Lab H",
+    "Measured dimensions and full floor geometry",
+    "Current access, independent route walk-through and any step-free alternative",
+    "Indoor positioning or deployed QR checkpoints"
+  ]
+}

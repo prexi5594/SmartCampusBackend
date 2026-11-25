@@ -4,12 +4,24 @@
   const $ = id => root.querySelector('#' + id);
   const ns = 'http://www.w3.org/2000/svg';
   const teachingBounds = [[36.87675, -1.21982], [36.8807, -1.21335]];
-  let data, directory, sources, buildings = [], map = null, selected = '', mode = '2d', area = 'teaching', activeResult = null;
-  let mapReady = false;
+  let data, directory, sources, pilot, buildings = [], map = null, selected = '', mode = '2d', area = 'teaching', activeResult = null;
+  let mapReady = false, routeVisible = false;
+  function showPilotRoute(show) {
+    routeVisible = show;
+    if (map && mapReady) ['pilot-path', 'pilot-connectors'].forEach(id => map.setLayoutProperty(id, 'visibility', show ? 'visible' : 'none'));
+    drawFlat();
+  }
+  function focusPilotRoute() {
+    const points = [...pilot.coordinates, pilot.gateCoordinate, pilot.entranceCoordinate];
+    map.fitBounds([
+      [Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))],
+      [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]
+    ], { padding: 55, duration: 0, bearing: 0 });
+  }
   const markers = [];
   const featuresById = new Map();
   const matchingGroups = id => directory.buildings.filter(group => group.osmCandidates.includes(id));
-  const featureLabel = feature => feature.properties.reviewId + ' Â· ' + (feature.properties.name || 'Unnamed building');
+  const featureLabel = feature => feature.properties.reviewId + ' · ' + (feature.properties.name || 'Unnamed building');
   function element(tag, text, className) {
     const node = document.createElement(tag);
     if (text !== undefined) node.textContent = text;
@@ -47,6 +59,15 @@
       }
       svg.appendChild(shape);
     }
+    if (pilot && routeVisible) {
+      for (const [coordinates, dashed] of [[pilot.coordinates, false], ...pilot.connectors.map(c => [c.coordinates, true])]) {
+        const path = document.createElementNS(ns, 'polyline');
+        path.setAttribute('points', coordinates.map(point => project(point).join(',')).join(' '));
+        path.setAttribute('fill', 'none'); path.setAttribute('stroke', dashed ? '#9d5c00' : '#1761cf'); path.setAttribute('stroke-width', '4');
+        if (dashed) path.setAttribute('stroke-dasharray', '5 3');
+        svg.append(path);
+      }
+    }
     buildings.forEach(feature => {
       const [x, y] = project(feature.properties.centre);
       if (x < 0 || x > w || y < 0 || y > h) return;
@@ -68,7 +89,7 @@
     const p = feature.properties;
     const groups = matchingGroups(feature.id);
     const group = result?.building || groups[0];
-    $('detail-name').textContent = result?.code ? result.code + ' Â· ' + result.building.shortName : group ? group.name : p.name || 'Unnamed building';
+    $('detail-name').textContent = result?.code ? result.code + ' · ' + result.building.shortName : group ? group.name : p.name || 'Unnamed building';
     $('detail-note').textContent = group ? 'Candidate match from the mapped building name. Please confirm its position on campus.' : 'OpenStreetMap outline and label. Please confirm its identity and current use.';
     const facts = [
       ['Review ID', p.reviewId], ['Mapped label', p.name || 'No name supplied'],
@@ -76,6 +97,13 @@
     ];
     $('detail-facts').replaceChildren(...facts.flatMap(pair => [element('dt', pair[0]), element('dd', pair[1])]));
     $('detail-room').textContent = result?.code ? 'Selected code: ' + result.code + '. Room position and floor are not provided by the guide.' : group?.rooms.length ? group.rooms.length + ' teaching spaces listed in the official guide.' : '';
+    if (group?.id === 'science') {
+      if (result?.code === 'Lab H') $('detail-room').textContent = 'Lab H: Biomedical Research Lab. First floor confirmed by the user; recorded indoor journey available for review. ';
+      $('detail-room').append(document.createTextNode(' Gate A path shown in blue is an assumption-based pilot; the entrance connection is estimated. '));
+      const indoorLink = element('a', 'Directions from Gate A to Lab H', 'source-link');
+      indoorLink.href = 'science-interior.html';
+      $('detail-room').append(document.createElement('br'), indoorLink);
+    }
     $('detail-source').href = 'https://www.openstreetmap.org/' + p.osmId;
     $('detail-source').textContent = 'View source on OpenStreetMap';
     $('detail-source').hidden = false;
@@ -86,10 +114,12 @@
     selected = id; activeResult = result;
     $('building-picker').value = id;
     describeFeature(feature, result);
+    showPilotRoute(id === 'way/1075687895');
     drawFlat();
     if (map && mapReady) {
       map.setFilter('selected-building', ['==', ['get', 'osmId'], id]);
-      if (focusCamera) map.easeTo({ center: feature.properties.centre, zoom: Math.max(map.getZoom(), 17.7), duration: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450 });
+      if (focusCamera && routeVisible) focusPilotRoute();
+      else if (focusCamera) map.easeTo({ center: feature.properties.centre, zoom: Math.max(map.getZoom(), 17.7), duration: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450 });
     }
     markers.forEach(item => item.button.classList.toggle('selected', item.id === id));
     setStatus('Selected ' + feature.properties.reviewId + ': ' + $('detail-name').textContent + '. Entrance confirmation pending.');
@@ -98,6 +128,7 @@
   function selectResult(result) {
     if (!result.candidates.length) {
       selected = ''; activeResult = result;
+      showPilotRoute(false);
       $('building-picker').value = '';
       $('detail-name').textContent = result.label;
       $('detail-note').textContent = 'The official guide lists this block, but its outline has not been identified. Use a B-number to tell us where it is.';
@@ -170,6 +201,9 @@
         map.addLayer({ id: 'paths', type: 'line', source: 'campus', filter: ['all', ['==', ['get', 'kind'], 'path'], ['==', ['get', 'pathType'], 'footway']], paint: { 'line-color': '#9fa99b', 'line-width': ['interpolate', ['linear'], ['zoom'], 15, .6, 19, 4] } });
         map.addLayer({ id: 'buildings', type: 'fill-extrusion', source: 'campus', filter: ['==', ['get', 'kind'], 'building'], paint: { 'fill-extrusion-color': '#b3c8d8', 'fill-extrusion-height': ['get', 'displayHeight'], 'fill-extrusion-opacity': 1 } });
         map.addLayer({ id: 'selected-building', type: 'fill-extrusion', source: 'campus', filter: ['==', ['get', 'osmId'], selected], paint: { 'fill-extrusion-color': '#1761cf', 'fill-extrusion-height': ['+', ['get', 'displayHeight'], .3] } });
+        map.addSource('science-pilot', { type: 'geojson', data: {type:'FeatureCollection',features:[{type:'Feature',properties:{connection:false},geometry:{type:'LineString',coordinates:pilot.coordinates}},...pilot.connectors.map(c=>({type:'Feature',properties:{connection:true},geometry:{type:'LineString',coordinates:c.coordinates}}))]} });
+        map.addLayer({id:'pilot-path',type:'line',source:'science-pilot',filter:['==',['get','connection'],false],layout:{visibility:routeVisible?'visible':'none'},paint:{'line-color':'#1761cf','line-width':5}}, 'buildings');
+        map.addLayer({id:'pilot-connectors',type:'line',source:'science-pilot',filter:['==',['get','connection'],true],layout:{visibility:routeVisible?'visible':'none'},paint:{'line-color':'#9d5c00','line-width':4,'line-dasharray':[2,2]}}, 'buildings');
         map.on('click', 'buildings', event => { if (event.features?.length) selectFeature(event.features[0].properties.osmId, null, false); });
         map.on('mouseenter', 'buildings', () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', 'buildings', () => { map.getCanvas().style.cursor = ''; });
@@ -178,7 +212,7 @@
             const feature = featuresById.get(id);
             if (!feature) continue;
             const block = group.blocks?.find(item => item.osmCandidates.includes(id));
-            const label = feature.properties.reviewId + ' Â· ' + (block ? block.code : group.shortName);
+            const label = feature.properties.reviewId + ' · ' + (block ? block.code : group.shortName);
             const button = element('button', label, 'map-label');
             button.type = 'button';
             button.setAttribute('aria-label', label + '; candidate location to confirm');
@@ -191,10 +225,15 @@
           const button = element('button', gate.name.split(' (')[0], 'map-label gate-label');
           button.type = 'button'; button.setAttribute('aria-label', gate.name + '; position and daily access to confirm');
           button.addEventListener('click', () => {
+            showPilotRoute(gate.id === 'gate-a');
+            if (gate.id === 'gate-a') focusPilotRoute();
             $('detail-name').textContent = gate.name;
             $('detail-note').textContent = directory.gateContext;
             $('detail-facts').replaceChildren(element('dt', 'Coordinates'), element('dd', gate.coordinates[1] + ', ' + gate.coordinates[0]));
-            $('detail-room').textContent = 'Published coordinates may identify an approach point rather than the exact gate. No route is attached.';
+            $('detail-room').textContent = gate.id === 'gate-a'
+              ? 'Follow the blue pilot route to Science Centre, then continue to first-floor Lab H. Outdoor paths are assumed accurate; the entrance connection is estimated.'
+              : 'Published coordinates may identify an approach point rather than the exact gate. No route is attached.';
+            if (gate.id === 'gate-a') { const link = element('a', 'Directions to first floor, Lab H', 'source-link'); link.href = 'science-interior.html'; $('detail-room').append(document.createElement('br'), link); }
             $('detail-source').textContent = 'View university gate guidance'; $('detail-source').href = directory.gateSource; $('detail-source').hidden = false;
           });
           new lib.Marker({ element: button }).setLngLat(gate.coordinates).addTo(map);
@@ -224,7 +263,7 @@
   }
   async function start() {
     try {
-      [data, directory, sources] = await Promise.all(['data/usiu-geography.geojson', 'data/usiu-directory.json', 'data/usiu-map-sources.json'].map(async url => {
+      [data, directory, sources, pilot] = await Promise.all(['data/usiu-geography.geojson', 'data/usiu-directory.json', 'data/usiu-map-sources.json', 'data/gate-a-science-pilot.json'].map(async url => {
         const response = await fetch(url);
         if (!response.ok) throw new Error('Could not load ' + url);
         return response.json();

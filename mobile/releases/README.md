@@ -1,42 +1,26 @@
-# Install Smart Campus on Android
+# Install the latest Smart Campus Android app
 
-`SmartCampus-0.1.0-debug.apk` is the locally built, debug-signed Android prototype.
-It is 5,478,631 bytes, with package ID `org.smartcampus.navigator`, version 0.1.0,
-minimum Android API 24 and target API 36. A SHA-256 file is provided alongside it.
+Download `SmartCampus-latest-debug.apk` (currently version 0.1.1, version code 2, built 24 November 2026). The versioned copy is `SmartCampus-0.1.1-debug.apk`. Size: 5,491,450 bytes. SHA-256: `1741a21758413323c01ba754a661d2b04616ab797cc7359a6fae6194bd21e781`.
 
-1. Copy the APK to your Android phone, for example over USB.
-2. Open it on the phone and follow Android's installation prompts.
-3. Open **Smart Campus** and choose **Try waypoint simulation**.
-4. Select **Start directions**, then use the simulated movement controls.
-5. Return to USIU to browse actual candidate buildings/rooms. **Use my location**
-   requests device location explicitly; allow precise location for useful positioning.
+1. Copy the latest APK to your Android phone and open it to install/update Smart Campus.
+2. Choose **Open Lab H guide** for Gate A → Science Centre → Floor 1 Lab H.
+3. Use Start, Next, Previous and Stop to confirm checkpoints manually. Ground, Floor 1 and Floor 2 diagrams are included.
+4. The existing destination search, device-location display and fictional waypoint simulation remain available.
 
-No phone was connected during the build, so this APK has not been installed or
-physically tested. The debug signature and packaged assets were verified on
-23 November 2026. This is not a signed Play Store release.
+The guide is bundled locally. It includes assumed paths, estimated entrance connections and schematic room outlines. It does not automatically locate you indoors. Verified GPS routing remains unavailable until the campus network is reviewed. The web accounts/saved-places link opens the hosted service and requires internet; native account integration is not included.
 
-**Real USIU walking routes are still unavailable.** Entrances and allowed paths
-must be confirmed before the app can guide a real journey. The simulation is
-fictional and does not use the device's location. The app does not provide room
-floors or indoor positioning. Keep it on screen for guidance; background/locked
-phone behaviour needs device testing.
+Verification: 27 Node tests passed; browser checks covered the app-to-guide link, start, next, floor switching, stop and entrance handoff with no captured errors/warnings. APK signature v2 and ZIP integrity passed; all 21 web assets match the build. Physical Android installation/GPS testing remains outstanding. This is a debug build, not a Play Store release. The old 0.1.0 file is retained as an archive; use the latest link above.
 
-For USB installation from the prepared project, after authorising the connected
-phone for debugging, run from `mobile`:
+From `mobile`, rebuild, sync, compile, verify and refresh both download copies:
 
 ```powershell
-.\.android-tools\sdk\platform-tools\adb.exe install releases\SmartCampus-0.1.0-debug.apk
+.\scripts\release-android.ps1
 ```
 
-To rebuild with the already installed local Java/SDK/Gradle tools:
+This command uses the already installed local Java/SDK and Python. It writes checksums and `latest.json` with all asset hashes. It is a manual release command, not an automatic background updater. Increment package.json and Android versionCode/versionName for the next release.
+
+For USB installation with an authorised debugging connection:
 
 ```powershell
-node scripts/build.mjs
-node node_modules/@capacitor/cli/bin/capacitor sync android
-.\scripts\build-android.ps1
-.\scripts\build-android.ps1 -VerifyOnly
+.\.android-tools\sdk\platform-tools\adb.exe install -r releases\SmartCampus-latest-debug.apk
 ```
-
-The rebuild writes `android/app/build/outputs/apk/debug/app-debug.apk`; this
-release-folder copy is the verified 23 November build, not an automatic alias.
-See `../README.md` and `../../docs/PHONE_NAVIGATION.md` for code and campus tests.

@@ -54,8 +54,14 @@ def main():
         else:
             assert client.post('/api/auth/login', json=credentials).status_code == 200
         try:
+            for entry in ['login.html', 'campus-navigator.html']:
+                response = client.get('/' + entry)
+                assert response.content == (ROOT / 'prototype/app/index.html').read_bytes(), entry
             assets = set()
-            for name in ['campus-navigator.html', 'usiu-map-review.html']:
+            shell = Page()
+            shell.feed(response.text)
+            assets.update(a.lstrip('/') for a in shell.assets)
+            for name in ['campus-tools.html', 'usiu-map-review.html', 'science-interior.html']:
                 response = client.get('/' + name)
                 assert response.status_code == 200, name
                 assert response.content == (ROOT / 'prototype' / name).read_bytes(), name
@@ -63,12 +69,12 @@ def main():
                 page = Page()
                 page.feed(response.text)
                 assert len(page.ids) == len(set(page.ids)), name
-                for element in ['map-live', 'campus-query', 'view-3d', 'review-details']:
+                for element in (['journey', 'steps', 'gaps'] if name == 'science-interior.html' else ['map-live', 'campus-query', 'view-3d', 'review-details']):
                     assert element in page.ids, element
-                if name == 'campus-navigator.html':
+                if name == 'campus-tools.html':
                     assert 'campus-map' in page.ids
                 assets.update(page.assets)
-            assets.update(['data/usiu-geography.geojson', 'data/usiu-directory.json',
+            assets.update(['data/gate-a-science-pilot.json', 'data/science-lab-h.json', 'data/usiu-geography.geojson', 'data/usiu-directory.json',
                            'data/usiu-map-sources.json',
                            'vendor/maplibre-gl-6.19.0/maplibre-gl.mjs',
                            'vendor/maplibre-gl-6.19.0/maplibre-gl-shared.mjs',

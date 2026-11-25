@@ -1,0 +1,1 @@
+export default function ContactPage(){return <section className="simple-page"><h1>Campus support</h1><p>Confirmed contact details will appear here. This app does not currently send support messages.</p><a href="/usiu-map-review.html">Open campus map</a></section>;}

@@ -2,25 +2,23 @@
 
 This folder contains the campus frontend, map review, mobile work, and a Python backend for credential login and shared ChromaDB storage. On 23 November 2026 the owner authorised accounts and private persistence in addition to the earlier homepage/map work. See `CURRENT_STATE.md` for current scope and verification.
 
+## React frontend wrapper
+
+The supplied SmartCampusFrontend source lives in `frontend/`. Run `pnpm install --frozen-lockfile` and `pnpm run build` there to update `prototype/app/`, then start `python -m backend` from the project root. Login, saved places and notes use the existing backend. The interactive map, Lab H guide and original navigation tools remain available from the new homepage.
+
 ## Current web app setup
 
 The web app is live at [Smart Campus Navigator](https://smart-campus-web-production-7dd97290.up.railway.app). Create an account, then sign into that same account on another device to access your saved places and notes. Railway stores accounts and ChromaDB on a persistent volume; this computer can be turned off. Hosting currently uses limited trial credit. See [Public deployment](docs/PUBLIC_DEPLOYMENT.md) for maintenance and verification. The local command below uses a separate local database.
 
-The frontend and backend run as **one app**: FastAPI serves `prototype/` and the
-browser calls `/api/` on that same server. Start both from this project folder:
+From this project folder, use the installed project environment:
 
 ```powershell
-.\.venv\Scripts\python.exe -m backend
+.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8765 --workers 1 --no-proxy-headers
 ```
 
 Open **http://127.0.0.1:8765**, create an account, and use **My saved places** to save destinations and private notes. Data persists in the ignored `private-data/` directory. Stop with Ctrl+C. The HTML files now need this backend for sign-in and storage.
 
 For a fresh checkout, run `python -m venv .venv` and `.\.venv\Scripts\python.exe -m pip install -r backend/requirements.lock.txt` first. Read [Accounts and storage](docs/ACCOUNTS_AND_STORAGE.md) for API reuse, configuration, tests and shared-server requirements.
-
-On macOS/Linux, use `.venv/bin/python -m backend` after installing the same lockfile.
-See [Frontend/backend integration](docs/FRONTEND_BACKEND.md) for the request flow,
-custom ports, integration checks and the untouched backup. No separate frontend
-server or JavaScript build is needed for the web app.
 
 The numbered planning/setup workflow below is the **original handoff**. Its planning-only and direct-file statements are historical; `CURRENT_STATE.md` records the later authorizations. Lessons, arrival planning and reminders remain later work.
 
@@ -29,7 +27,7 @@ The numbered planning/setup workflow below is the **original handoff**. Its plan
 The owner approved Android-first Capacitor navigation using device location.
 Source, native project, preview and setup instructions are in
 [`mobile/README.md`](mobile/README.md). A verified debug APK is available at
-[`mobile/releases/SmartCampus-0.1.0-debug.apk`](mobile/releases/SmartCampus-0.1.0-debug.apk),
+[`mobile/releases/SmartCampus-latest-debug.apk`](mobile/releases/SmartCampus-latest-debug.apk),
 with a labelled waypoint simulation. Physical-device checks and reviewed USIU
 entrances/paths remain required. Read `CURRENT_STATE.md` for current
 approvals, including separate ongoing work. The original setup below is
